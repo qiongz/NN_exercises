@@ -11,7 +11,7 @@ using namespace std;
 class nn_lr
 {
 public:
-    nn_lr(int n_f,int n_c):n_features(n_f),n_classes(n_c=2) {
+    nn_lr(int n_f,int n_c):n_features(n_f),n_classes(n_c) {
         initialize_weights();
 	seed=time(0);
     }
@@ -32,7 +32,8 @@ private:
     float cost_function(float *A,float *J,const float *Y,const int &n_sample);
     void forward_propagate(float *A,const float *X,const int &n_sample);
     void backward_propagate(float *A, const float *X, const float *Y,const int &n_sample);
-    void softmax(float *A,const int &n_sample);
+    void gradient_approx(float *A,float *J,const float *X,const float *Y,const int &n_sample);
+    void get_softmax(float *A,const int &n_sample);
     float max(float *x,int range,int &index_max);
     void initialize_weights();
 };

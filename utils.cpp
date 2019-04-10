@@ -3,18 +3,20 @@
 void load_data(string filename,vector<float> &X,vector<int> &Y,int &n_sample,int &n_features) {
     int i,count=0;
     ifstream datafile(filename);
+    std::list<string>:: iterator it;
     if(datafile.is_open()) {
         string line,element;
-        vector<string> values_str;
-        getline(datafile,line,'\n');
-        while(std::getline(datafile,line,'\n')) {
+        list<string> values_str;
+        getline(datafile,line);
+        while(std::getline(datafile,line)) {
             istringstream iss_line(line);
             while(std::getline(iss_line,element,','))
                 values_str.push_back(element);
             Y.push_back(stoi(values_str.front(),nullptr));
-            n_features=values_str.size()-1;
-            for(i=1; i<n_features; i++)
-                X.push_back(stod(values_str[i],nullptr)/255.0);
+	    values_str.pop_front();
+            n_features=values_str.size();
+	    for(it=values_str.begin();it!=values_str.end();it++)
+                X.push_back(stod(*it,nullptr)/255.0);
             count++;
             values_str.clear();
         }
@@ -52,11 +54,33 @@ void onehot(const vector<int> &Y,vector<int> &Y_onehot,int n_classes) {
     int  n_sample=Y.size();
     Y_onehot.assign(n_sample*n_classes,0);
     for(int i=0; i<n_sample; i++)
-	Y_onehot[Y[i]+i*n_classes]=1;
+	Y_onehot[Y[i]%n_classes+i*n_classes]=1;
 }
 
 
 void print(const vector<float> &X,int id,int height,int width) {
+    int n_pixes=height*width;
+    for(int i=0; i<width; i++)
+        cout<<"-";
+    cout<<endl;
+    float mean=0;
+    for(int i=0; i<n_pixes; i++)
+        mean+=X[id*n_pixes+i];
+    mean/=n_pixes;
+    for(int i=0; i<height; i++) {
+        for(int j=0; j<width; j++)
+            if(X[i*width+j+id*n_pixes]>mean)
+                cout<<"*";
+            else
+                cout<<" ";
+        cout<<endl;
+    }
+    for(int i=0; i<width; i++)
+        cout<<"-";
+    cout<<endl;
+}
+
+void print(const float *X,int id,int height,int width) {
     int n_pixes=height*width;
     for(int i=0; i<width; i++)
         cout<<"-";

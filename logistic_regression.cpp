@@ -23,6 +23,7 @@ int main(int argc,char *argv[]) {
     clr.fit(X_train,Y_train,n_train,num_epochs,learning_rate,Lambda,batch_size,true);
     accuracy=clr.predict_accuracy(X_dev,Y_dev_orig,Y_prediction,n_dev);
     cout<<"validation set accuracy:"<<accuracy<<endl;
+   
 
     int id=0;
     string id_str;
