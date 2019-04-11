@@ -1,8 +1,7 @@
 #include"init.h"
 #include"utils.h"
-#include"nn_lr.h"
+#include"dnn.h"
 
-using namespace std;
 int main(int argc,char *argv[]) {
     vector<float> X_train,X_dev;
     vector<int> Y_train_orig,Y_dev_orig;
@@ -18,10 +17,15 @@ int main(int argc,char *argv[]) {
     onehot(Y_train_orig,Y_train,n_classes);
     onehot(Y_dev_orig,Y_dev,n_classes);
 
+    // test with one-layer
+    int n_hidden=1;
+    vector<string> activation_types{"sigmoid"};
+    vector<int> dim_hidden{20};
 
-    nn_lr  clr(n_features,n_classes);
+    dnn clr(n_features,n_classes);
+    //nn_lr  clr(n_features,n_classes,n_hidden,dim_hidden,activation_types);
     clr.fit(X_train,Y_train,n_train,num_epochs,learning_rate,Lambda,batch_size,true);
-    accuracy=clr.predict_accuracy(X_dev,Y_dev_orig,Y_prediction,n_dev);
+    accuracy=clr.predict_accuracy(X_dev,Y_dev_orig,Y_prediction,n_dev,batch_size);
     cout<<"validation set accuracy:"<<accuracy<<endl;
    
 
@@ -37,6 +41,5 @@ int main(int argc,char *argv[]) {
             cout<<"Actual: "<<Y_dev_orig[id]<<endl;
         }
     }
-
     return 0;
 }

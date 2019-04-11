@@ -5,6 +5,7 @@
 #include<vector>
 #include<list>
 #include<cmath>
+
 using namespace std;
 
 void load_data(string filename,vector<float> &X,vector<int> &Y,int &n_sample,int &n_features);
