@@ -35,6 +35,8 @@ private:
     void weights_update(const float &learning_rate);
     void get_softmax(const int &n_sample);
     void sigmoid_activate(const int &l,const int &n_sample);
+    void ReLU_activate(const int &l,const int &n_sample);
+    void LeakyReLU_activate(const int &l,const int &n_sample);
     float max(float *x,int range,int &index_max);
     void initialize_weights();
 public:
@@ -74,6 +76,7 @@ public:
       W.clear();
     }
     void fit(const vector<float>&,const vector<int>&,const int &,const int,const float,float,int,bool);
+    void train_and_dev(const vector<float>&,const vector<int>&,const vector<float>&,const vector<int>&,const int &,const int &,const int,const float,float,int,bool);
     void predict(const vector<float>& _X,vector<int> &Y_prediction,const int &n_sample,const int &batch_size);
     float predict_accuracy(const vector<float>& _X,const vector<int> &Y,vector<int> &Y_prediction,const int &n_sample,const int &batch_size);
 };
