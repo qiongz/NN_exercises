@@ -10,10 +10,16 @@ default:
 	@echo "Available make targets are:"
 	@echo "  make test_lr       # compiles logistic_regression.cpp nn_lr.cpp"
 
-all:test_nn
+all:test_lr test_fnn
 
 test_lr:lr.o init.o utils.o dnn.o
 	$(ICC) $^ -O3 -o $@  ${PARAL_MKL_LIBS}
+
+test_fnn:fnn.o init.o utils.o dnn.o
+	$(ICC) $^ -O3 -o $@  ${PARAL_MKL_LIBS}
+
+fnn.o:feed_forward_neural_network.cpp
+	$(ICC) $(CFLAGS) $(MKL_CFLAGS) $^ -c -o $@
 
 lr.o:logistic_regression.cpp
 	$(ICC) $(CFLAGS) $(MKL_CFLAGS) $^ -c -o $@

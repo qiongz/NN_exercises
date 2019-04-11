@@ -17,13 +17,8 @@ int main(int argc,char *argv[]) {
     onehot(Y_train_orig,Y_train,n_classes);
     onehot(Y_dev_orig,Y_dev,n_classes);
 
-    // test with one-layer
-    int n_hidden=1;
-    vector<string> activation_types{"sigmoid"};
-    vector<int> dim_hidden{20};
-
+    // multi-classes logistic regression 
     dnn clr(n_features,n_classes);
-    //nn_lr  clr(n_features,n_classes,n_hidden,dim_hidden,activation_types);
     clr.fit(X_train,Y_train,n_train,num_epochs,learning_rate,Lambda,batch_size,true);
     accuracy=clr.predict_accuracy(X_dev,Y_dev_orig,Y_prediction,n_dev,batch_size);
     cout<<"validation set accuracy:"<<accuracy<<endl;
