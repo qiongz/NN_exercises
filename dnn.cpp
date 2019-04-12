@@ -336,7 +336,7 @@ void dnn::weights_update(const float &learning_rate){
 }
 
 
-void dnn::train_and_dev(const vector<float> &_X_train,const vector<int> &_Y_train,const vector<float>& _X_dev, const vector<int>& _Y_dev,const int &n_train, const int &n_dev, const int num_epochs=500,const float learning_rate=0.01,const float _lambda=0,int batch_size=128,bool print_cost=false) {
+void dnn::train_and_dev(const vector<float> &_X_train,const vector<int> &_Y_train,const vector<float>& _X_dev, const vector<int>& _Y_dev,const int &n_train, const int &n_dev, const int num_epochs=500,float learning_rate=0.01,const float _lambda=0,int batch_size=128,bool print_cost=false) {
     Lambda=_lambda;
     // tempory space for storing the shuffled training/developing data sets
     float *X_train=new float[_X_train.size()];
@@ -367,10 +367,15 @@ void dnn::train_and_dev(const vector<float> &_X_train,const vector<int> &_Y_trai
     // use num_dev_batches*batch_size for simplicity
     int num_dev_batches=n_dev/batch_size; 
 
-    for(int i=0; i<num_epochs; i++) {
+    float alpha,epsilon_0,epsilon_tau;
+    epsilon_0=learning_rate;
+    epsilon_tau=epsilon_0*0.01;
+    for(int i=0; i<num_epochs+1; i++) {
         // shuffle training data sets for one epoch
         shuffle(X_train,Y_train,n_train);
         cost_train=0;
+	alpha=i*1.0/num_epochs;
+	learning_rate=(1-alpha)*epsilon_0+alpha*epsilon_tau;
         // batch training until all the data sets are used
         for(int s=0; s<num_train_batches; s++) {
             // batch feed A[0] from X_train
@@ -380,13 +385,13 @@ void dnn::train_and_dev(const vector<float> &_X_train,const vector<int> &_Y_trai
             cost_batch=cost_function(Y_batch,batch_size);
             weights_update(learning_rate);
             cost_train+=cost_batch;
+	    if(dropout==true)
+	      dropout_regularization();
         }
-	if(dropout==true)
-          dropout_regularization();
 
         cost_train/=num_train_batches;
         // evaluate the developing data sets and print the training/dev cost
-        if(print_cost && i%50==0) {
+        if(print_cost && i%10==0) {
 	    cost_dev=0;	
             for(int s=0; s<num_dev_batches; s++) {
             // batch feed A[0] from X_dev

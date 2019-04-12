@@ -67,7 +67,7 @@ public:
      * @param print_cost print the training/validation cost every 50 epochs if print_cost==true
      * @return weights and bias W,b updated in the object
      */
-    void train_and_dev(const vector<float>&X_train,const vector<int>&Y_train,const vector<float>&X_dev,const vector<int>&Y_dev,const int &n_train,const int &n_dev,const int num_epochs,const float learning_rate,float lambda,int batch_size,bool print_cost);
+    void train_and_dev(const vector<float>&X_train,const vector<int>&Y_train,const vector<float>&X_dev,const vector<int>&Y_dev,const int &n_train,const int &n_dev,const int num_epochs,float learning_rate,float lambda,int batch_size,bool print_cost);
     /**
      * Perform prediction for the given unlabeled datasets
      * @param X datasets X
