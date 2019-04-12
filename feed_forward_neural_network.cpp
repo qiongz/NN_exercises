@@ -20,12 +20,12 @@ int main(int argc,char *argv[]) {
     // test with two hidden layers
     int n_hidden=2;
     vector<string> activation_types{"ReLU","sigmoid"};
-    vector<int> dim_hidden{120,30};
-    vector<float> keep_probs{0.7,0.9};
+    vector<int> dim_hidden{256,64};
+    vector<float> keep_probs{0.7,0.8};
 
     dnn  clr(n_features,n_classes,n_hidden,dim_hidden,activation_types,keep_probs);
     clr.train_and_dev(X_train,Y_train,X_dev,Y_dev,n_train,n_dev,num_epochs,learning_rate,Lambda,batch_size,true);
-    accuracy=clr.predict_accuracy(X_dev,Y_dev_orig,Y_prediction,n_dev,batch_size);
+    accuracy=clr.predict_accuracy(X_dev,Y_dev_orig,Y_prediction,n_dev);
     cout<<"validation set accuracy:"<<accuracy<<endl;
    
 

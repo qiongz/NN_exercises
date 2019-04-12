@@ -8,20 +8,20 @@ PARAL_MKL_LIBS   := -L${MKLROOT}/lib/intel64 -lmkl_intel_lp64  \
 # ----------------------------------------
 default:
 	@echo "Available make targets are:"
-	@echo "  make test_lr       # compiles logistic_regression.cpp nn_lr.cpp"
+	@echo "  make test_mlr test_ffnn    # compiles logistic_regression.cpp nn_lr.cpp"
 
-all:test_lr test_fnn
+all:test_mlr test_ffnn
 
-test_lr:lr.o init.o utils.o dnn.o
+test_mlr:mlr.o init.o utils.o dnn.o
 	$(ICC) $^ -O3 -o $@  ${PARAL_MKL_LIBS}
 
-test_fnn:fnn.o init.o utils.o dnn.o
+test_ffnn:ffnn.o init.o utils.o dnn.o
 	$(ICC) $^ -O3 -o $@  ${PARAL_MKL_LIBS}
 
-fnn.o:feed_forward_neural_network.cpp
+ffnn.o:feed_forward_neural_network.cpp
 	$(ICC) $(CFLAGS) $(MKL_CFLAGS) $^ -c -o $@
 
-lr.o:logistic_regression.cpp
+mlr.o:logistic_regression.cpp
 	$(ICC) $(CFLAGS) $(MKL_CFLAGS) $^ -c -o $@
 
 init.o:init.cpp
@@ -38,6 +38,6 @@ clean:
 	rm -f *.o 
 
 remove:
-	rm -f  test_lr
+	rm -f  test_mlr test_ffnn
 
 

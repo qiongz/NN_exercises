@@ -1,0 +1,157 @@
+\hypertarget{classdnn}{}\section{dnn Class Reference}
+\label{classdnn}\index{dnn@{dnn}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classdnn_ab6d436cbc35d10258bd8d3e314cb36b8}{dnn} (int n\+\_\+f, int n\+\_\+c)
+\item 
+\hyperlink{classdnn_aae6e714fc63cc1b73b40510e5a3401c7}{dnn} (int n\+\_\+f, int n\+\_\+c, int n\+\_\+h, const vector$<$ int $>$ \&dims, const vector$<$ string $>$ \&act\+\_\+types)
+\item 
+\hyperlink{classdnn_a657974689367069e38e600c594a461f0}{dnn} (int n\+\_\+f, int n\+\_\+c, int n\+\_\+h, const vector$<$ int $>$ \&dims, const vector$<$ string $>$ \&act\+\_\+types, const vector$<$ float $>$ \&k\+\_\+ps)
+\item 
+\mbox{\Hypertarget{classdnn_a3384dfd89ac2e10f6554e05a53b288ad}\label{classdnn_a3384dfd89ac2e10f6554e05a53b288ad}} 
+\hyperlink{classdnn_a3384dfd89ac2e10f6554e05a53b288ad}{$\sim$dnn} ()
+\begin{DoxyCompactList}\small\item\em destructor, clean the memory space \end{DoxyCompactList}\item 
+void \hyperlink{classdnn_a0e498a3b9d592bd9d217bd0c8f4fa94a}{train\+\_\+and\+\_\+dev} (const vector$<$ float $>$ \&X\+\_\+train, const vector$<$ int $>$ \&Y\+\_\+train, const vector$<$ float $>$ \&X\+\_\+dev, const vector$<$ int $>$ \&Y\+\_\+dev, const int \&n\+\_\+train, const int \&n\+\_\+dev, const int num\+\_\+epochs, const float learning\+\_\+rate, float lambda, int batch\+\_\+size, bool print\+\_\+cost)
+\item 
+void \hyperlink{classdnn_a9809de12b4182b61b98e652b0e61856c}{predict} (const vector$<$ float $>$ \&X, vector$<$ int $>$ \&Y\+\_\+prediction, const int \&n\+\_\+sample)
+\item 
+float \hyperlink{classdnn_a7f12d5a496ec38e1b4def98908e32236}{predict\+\_\+accuracy} (const vector$<$ float $>$ \&\+\_\+X, const vector$<$ int $>$ \&Y, vector$<$ int $>$ \&Y\+\_\+prediction, const int \&n\+\_\+sample)
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classdnn_ab6d436cbc35d10258bd8d3e314cb36b8}\label{classdnn_ab6d436cbc35d10258bd8d3e314cb36b8}} 
+\index{dnn@{dnn}!dnn@{dnn}}
+\index{dnn@{dnn}!dnn@{dnn}}
+\subsubsection{\texorpdfstring{dnn()}{dnn()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily dnn\+::dnn (\begin{DoxyParamCaption}\item[{int}]{n\+\_\+f,  }\item[{int}]{n\+\_\+c }\end{DoxyParamCaption})}
+
+constructor without hidden layers, perform logistic regression 
+\begin{DoxyParams}{Parameters}
+{\em n\+\_\+f} & No. of features in X \\
+\hline
+{\em n\+\_\+c} & No. of classes in Y \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classdnn_aae6e714fc63cc1b73b40510e5a3401c7}\label{classdnn_aae6e714fc63cc1b73b40510e5a3401c7}} 
+\index{dnn@{dnn}!dnn@{dnn}}
+\index{dnn@{dnn}!dnn@{dnn}}
+\subsubsection{\texorpdfstring{dnn()}{dnn()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily dnn\+::dnn (\begin{DoxyParamCaption}\item[{int}]{n\+\_\+f,  }\item[{int}]{n\+\_\+c,  }\item[{int}]{n\+\_\+h,  }\item[{const vector$<$ int $>$ \&}]{dims,  }\item[{const vector$<$ string $>$ \&}]{act\+\_\+types }\end{DoxyParamCaption})}
+
+constructor with hidden layer dimensions and activation types specified 
+\begin{DoxyParams}{Parameters}
+{\em n\+\_\+f} & No. of features in X \\
+\hline
+{\em n\+\_\+c} & No. of classes in Y \\
+\hline
+{\em n\+\_\+h} & No. of hidden layers \\
+\hline
+{\em dims} & integer vector containing hidden layer dimension \\
+\hline
+{\em act\+\_\+types} & string vector containing activation types for the hidden layers \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classdnn_a657974689367069e38e600c594a461f0}\label{classdnn_a657974689367069e38e600c594a461f0}} 
+\index{dnn@{dnn}!dnn@{dnn}}
+\index{dnn@{dnn}!dnn@{dnn}}
+\subsubsection{\texorpdfstring{dnn()}{dnn()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily dnn\+::dnn (\begin{DoxyParamCaption}\item[{int}]{n\+\_\+f,  }\item[{int}]{n\+\_\+c,  }\item[{int}]{n\+\_\+h,  }\item[{const vector$<$ int $>$ \&}]{dims,  }\item[{const vector$<$ string $>$ \&}]{act\+\_\+types,  }\item[{const vector$<$ float $>$ \&}]{k\+\_\+ps }\end{DoxyParamCaption})}
+
+constructor with hidden layer dimensions, activation types and dropout keep\+\_\+probs specified 
+\begin{DoxyParams}{Parameters}
+{\em n\+\_\+f} & No. of features in X \\
+\hline
+{\em n\+\_\+c} & No. of classes in Y \\
+\hline
+{\em n\+\_\+h} & No. of hidden layers \\
+\hline
+{\em dims} & integer vector containing hidden layer dimension \\
+\hline
+{\em act\+\_\+types} & string vector containing activation types for the hidden layers \\
+\hline
+{\em k\+\_\+ps} & keep probabilities for dropout in the hidden layers \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classdnn_a9809de12b4182b61b98e652b0e61856c}\label{classdnn_a9809de12b4182b61b98e652b0e61856c}} 
+\index{dnn@{dnn}!predict@{predict}}
+\index{predict@{predict}!dnn@{dnn}}
+\subsubsection{\texorpdfstring{predict()}{predict()}}
+{\footnotesize\ttfamily void dnn\+::predict (\begin{DoxyParamCaption}\item[{const vector$<$ float $>$ \&}]{X,  }\item[{vector$<$ int $>$ \&}]{Y\+\_\+prediction,  }\item[{const int \&}]{n\+\_\+sample }\end{DoxyParamCaption})}
+
+Perform prediction for the given unlabeled datasets 
+\begin{DoxyParams}{Parameters}
+{\em X} & datasets X \\
+\hline
+{\em Y\+\_\+prediction} & output integer vector containing the predicted labels \\
+\hline
+{\em n\+\_\+sample} & No. of samples in the datasets \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the predicted labels stored in Y\+\_\+prediction 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classdnn_a7f12d5a496ec38e1b4def98908e32236}\label{classdnn_a7f12d5a496ec38e1b4def98908e32236}} 
+\index{dnn@{dnn}!predict\+\_\+accuracy@{predict\+\_\+accuracy}}
+\index{predict\+\_\+accuracy@{predict\+\_\+accuracy}!dnn@{dnn}}
+\subsubsection{\texorpdfstring{predict\+\_\+accuracy()}{predict\_accuracy()}}
+{\footnotesize\ttfamily float dnn\+::predict\+\_\+accuracy (\begin{DoxyParamCaption}\item[{const vector$<$ float $>$ \&}]{\+\_\+X,  }\item[{const vector$<$ int $>$ \&}]{Y,  }\item[{vector$<$ int $>$ \&}]{Y\+\_\+prediction,  }\item[{const int \&}]{n\+\_\+sample }\end{DoxyParamCaption})}
+
+Predict and calculate the prediction accuracy for the given labeled datasets 
+\begin{DoxyParams}{Parameters}
+{\em X} & datasets X \\
+\hline
+{\em Y} & datasets Y (labels) \\
+\hline
+{\em Y\+\_\+prediction} & output integer vector containing the predicted labels \\
+\hline
+{\em n\+\_\+sample} & No. of samples in the datasets \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+accuracy , and the predicted labels stored in Y\+\_\+prediction 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classdnn_a0e498a3b9d592bd9d217bd0c8f4fa94a}\label{classdnn_a0e498a3b9d592bd9d217bd0c8f4fa94a}} 
+\index{dnn@{dnn}!train\+\_\+and\+\_\+dev@{train\+\_\+and\+\_\+dev}}
+\index{train\+\_\+and\+\_\+dev@{train\+\_\+and\+\_\+dev}!dnn@{dnn}}
+\subsubsection{\texorpdfstring{train\+\_\+and\+\_\+dev()}{train\_and\_dev()}}
+{\footnotesize\ttfamily void dnn\+::train\+\_\+and\+\_\+dev (\begin{DoxyParamCaption}\item[{const vector$<$ float $>$ \&}]{X\+\_\+train,  }\item[{const vector$<$ int $>$ \&}]{Y\+\_\+train,  }\item[{const vector$<$ float $>$ \&}]{X\+\_\+dev,  }\item[{const vector$<$ int $>$ \&}]{Y\+\_\+dev,  }\item[{const int \&}]{n\+\_\+train,  }\item[{const int \&}]{n\+\_\+dev,  }\item[{const int}]{num\+\_\+epochs = {\ttfamily 500},  }\item[{const float}]{learning\+\_\+rate = {\ttfamily 0.01},  }\item[{float}]{lambda = {\ttfamily 0},  }\item[{int}]{batch\+\_\+size = {\ttfamily 128},  }\item[{bool}]{print\+\_\+cost = {\ttfamily false} }\end{DoxyParamCaption})}
+
+Perform stochastic batch gradient training and evaluation using the validation(developing) data sets 
+\begin{DoxyParams}{Parameters}
+{\em X\+\_\+train} & training datasets X \\
+\hline
+{\em Y\+\_\+train} & training datasets Y \\
+\hline
+{\em X\+\_\+dev} & validation datasets X \\
+\hline
+{\em Y\+\_\+dev} & validation datasets Y \\
+\hline
+{\em n\+\_\+train} & No. of training samples \\
+\hline
+{\em n\+\_\+dev} & No. of validataion samples \\
+\hline
+{\em num\+\_\+epochs} & No. of epochs to train \\
+\hline
+{\em learning\+\_\+rate} & learning rate of of gradients updating \\
+\hline
+{\em lambda} & L2-\/regularization factor \\
+\hline
+{\em batch\+\_\+size} & batch size in the stochastic batch gradient training \\
+\hline
+{\em print\+\_\+cost} & print the training/validation cost every 50 epochs if print\+\_\+cost==true \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+weights and bias W,b updated in the object 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+dnn.\+h\item 
+dnn.\+cpp\end{DoxyCompactItemize}

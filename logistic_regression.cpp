@@ -19,8 +19,8 @@ int main(int argc,char *argv[]) {
 
     // multi-classes logistic regression 
     dnn clr(n_features,n_classes);
-    clr.fit(X_train,Y_train,n_train,num_epochs,learning_rate,Lambda,batch_size,true);
-    accuracy=clr.predict_accuracy(X_dev,Y_dev_orig,Y_prediction,n_dev,batch_size);
+    clr.train_and_dev(X_train,Y_train,X_dev,Y_dev,n_train,n_dev,num_epochs,learning_rate,Lambda,batch_size,true);
+    accuracy=clr.predict_accuracy(X_dev,Y_dev_orig,Y_prediction,n_dev);
     cout<<"validation set accuracy:"<<accuracy<<endl;
    
 
