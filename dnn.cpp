@@ -1,5 +1,61 @@
 #include"dnn.h"
 #define EPSILON 1e-12
+
+dnn::dnn(int n_f,int n_c){
+	mkl_seed=time(0);
+	n_features=n_f;
+	n_classes=n_c;
+	n_layers=2;
+	layer_dims.push_back(n_features);
+	layer_dims.push_back(n_classes);
+	activation_types.push_back("NULL");
+	activation_types.push_back("softmax");
+        initialize_weights();
+    }
+
+dnn::dnn(int n_f,int n_c,int n_h,const vector<int>& dims,const vector<string>& act_types){
+	mkl_seed=time(0);
+	n_features=n_f;
+	n_classes=n_c;
+	n_layers=n_h+2;
+	layer_dims.push_back(n_features);
+	for(int i=0;i<n_h;i++) layer_dims.push_back(dims[i]);
+	layer_dims.push_back(n_classes);
+	activation_types.push_back("NULL");
+	for(int i=0;i<n_h;i++)
+	activation_types.push_back(act_types[i]);
+	activation_types.push_back("softmax");
+	keep_probs.assign(n_h,1);
+        initialize_weights();
+}
+
+dnn::dnn(int n_f,int n_c,int n_h,const vector<int>& dims,const vector<string>& act_types,const vector<float>& k_ps){
+	mkl_seed=time(0);
+	n_features=n_f;
+	n_classes=n_c;
+	n_layers=n_h+2;
+	layer_dims.push_back(n_features);
+	for(int i=0;i<n_h;i++) layer_dims.push_back(dims[i]);
+	layer_dims.push_back(n_classes);
+	activation_types.push_back("NULL");
+	for(int i=0;i<n_h;i++)
+	activation_types.push_back(act_types[i]);
+	activation_types.push_back("softmax");
+	dropout=true;
+	keep_probs.assign(k_ps.begin(),k_ps.end());
+        initialize_weights();
+}
+
+dnn::~dnn(){
+      for(int i=0;i<n_layers;i++)
+       delete db[i],b[i],dW[i],W[i];
+      
+      db.clear();
+      b.clear();
+      dW.clear();
+      W.clear();
+    }
+
 void dnn::initialize_weights() {
     weights_seed=123457;
     default_random_engine rng(weights_seed);
@@ -25,10 +81,10 @@ void dnn::initialize_weights() {
 }
 
 //Fisher and Yates' shuffle algorithm
-void dnn::shuffle(float *X,float *Y,int n_sample, int skip) {
+void dnn::shuffle(float *X,float *Y,int n_sample) {
     VSLStreamStatePtr rndStream;
-    vslNewStream(&rndStream, VSL_BRNG_MT19937,shuffle_seed);
-    vslSkipAheadStream(rndStream,n_sample*(skip+1));
+    vslNewStream(&rndStream, VSL_BRNG_MT19937,mkl_seed);
+    vslSkipAheadStream(rndStream,mkl_rnd_skipped);
     unsigned int *i_buffer = new unsigned int[n_sample];
     float *X_temp=new float[n_features];
     float *Y_temp=new float[n_classes];
@@ -40,6 +96,7 @@ void dnn::shuffle(float *X,float *Y,int n_sample, int skip) {
             cblas_sswap(n_classes,Y+i*n_classes,1,Y+j*n_classes,1);
         }
     }
+    mkl_rnd_skipped+=n_sample;
     vslDeleteStream(&rndStream);
     delete Y_temp,X_temp,i_buffer;
 }
@@ -199,6 +256,27 @@ void dnn::multi_layers_backward(const float *Y,const int &n_sample) {
         backward_propagate(l,n_sample);
 }
 
+
+void dnn::dropout_regularization(){
+    VSLStreamStatePtr rndStream;
+    vslNewStream(&rndStream, VSL_BRNG_MT19937,mkl_seed);
+    vslSkipAheadStream(rndStream,mkl_rnd_skipped);
+    float *f_buffer=new float[32];
+    for(int l=1;l<n_layers-1;l++){
+      int count=0;
+      do{
+        vsRngUniform(METHOD_FLOAT,rndStream,32,f_buffer,0,1.0);
+	for(int j=0;j<32;j++)
+	    if(count+j<layer_dims[l])
+	      A[l][count+j]=(A[l][count+j]<keep_probs[l]?1:0)/keep_probs[l];
+	    else
+              break;
+	count+=32;
+	mkl_rnd_skipped+=32;
+      }while(count<layer_dims[l]);
+    }
+}
+
 void dnn::weights_update(const float &learning_rate){
     for(int l=1;l<n_layers;l++){
        // W[l]:=W[l]-learning_rate*dW[l]
@@ -234,7 +312,7 @@ void dnn::fit(const vector<float> &_X,const vector<int> &_Y,const int &n_sample,
     int num_batches=n_sample/batch_size;
     for(int i=0; i<num_epochs; i++) {
         // shuffle training data sets for one epoch
-        shuffle(X,Y,n_sample,i);
+        shuffle(X,Y,n_sample);
         cost=0;
         // batch training until all the data sets are used
         for(int s=0; s<num_batches; s++) {
@@ -247,6 +325,8 @@ void dnn::fit(const vector<float> &_X,const vector<int> &_Y,const int &n_sample,
             weights_update(learning_rate);
             cost+=cost_batch;
         }
+	if(dropout==true)
+          dropout_regularization();
         cost/=num_batches;
         // print the cost
         if(print_cost && i%10==0) {
@@ -290,9 +370,10 @@ void dnn::train_and_dev(const vector<float> &_X_train,const vector<int> &_Y_trai
     float cost_train,cost_dev,cost_batch;
     int num_train_batches=n_train/batch_size;
     int num_dev_batches=n_dev/batch_size; // only use num_dev_batches*batch_size for simplity
+    long num_rnd_skipped;
     for(int i=0; i<num_epochs; i++) {
         // shuffle training data sets for one epoch
-        shuffle(X_train,Y_train,n_train,i);
+        shuffle(X_train,Y_train,n_train);
         cost_train=0;
         // batch training until all the data sets are used
         for(int s=0; s<num_train_batches; s++) {
@@ -303,8 +384,12 @@ void dnn::train_and_dev(const vector<float> &_X_train,const vector<int> &_Y_trai
             multi_layers_backward(Y_batch,batch_size);
             cost_batch=cost_function(Y_batch,batch_size);
             weights_update(learning_rate);
+
             cost_train+=cost_batch;
         }
+	if(dropout==true)
+          dropout_regularization();
+
         cost_train/=num_train_batches;
         // print the cost
         if(print_cost && i%10==0) {
