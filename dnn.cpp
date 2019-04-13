@@ -1,4 +1,4 @@
-#include"dnn.h"
+#include"dnn.h" 
 #define EPSILON 1e-12
 
 dnn::dnn(int n_f,int n_c){
@@ -70,14 +70,23 @@ void dnn::initialize_weights() {
     float *null_ptr=NULL;
     W.push_back(null_ptr);
     dW.push_back(null_ptr);
+    VdW.push_back(null_ptr);
+    SdW.push_back(null_ptr);
     b.push_back(null_ptr);
     db.push_back(null_ptr);
+    Vdb.push_back(null_ptr);
+    Sdb.push_back(null_ptr);
     for(int l=1; l<n_layers; l++) {
 	// create memory space for W[l],dW[l],b[l],db[l]
         W.push_back(new float[layer_dims[l-1]*layer_dims[l]]);
         dW.push_back(new float[layer_dims[l-1]*layer_dims[l]]);
         b.push_back(new float[layer_dims[l]]);
         db.push_back(new float[layer_dims[l]]);
+        /// create memory space for Adam optimizer variables
+        VdW.push_back(new float[layer_dims[l-1]*layer_dims[l]]);
+        SdW.push_back(new float[layer_dims[l-1]*layer_dims[l]]);
+        Vdb.push_back(new float[layer_dims[l]]);
+        Sdb.push_back(new float[layer_dims[l]]);
 	// initialize weights from random No.s from normal distribution
         for(int j=0; j<layer_dims[l-1]*layer_dims[l]; j++)
             // scale W[l] with sqrt(1/n[l]) to prevent Z[l] becoming too large/small
@@ -90,6 +99,11 @@ void dnn::initialize_weights() {
                 W[l][j]=dist_norm(rng)*sqrt(2.0/(layer_dims[l-1]*keep_probs[l-1])); 
 	// initialize bias b[l] with zeros
         memset(b[l],0,sizeof(float)*layer_dims[l]);
+        /// initialize Adam optimizer variables
+	memset(VdW[l],0,sizeof(float)*layer_dims[l]*layer_dims[l-1]);
+	memset(SdW[l],0,sizeof(float)*layer_dims[l]*layer_dims[l-1]);
+	memset(Vdb[l],0,sizeof(float)*layer_dims[l]);
+	memset(Sdb[l],0,sizeof(float)*layer_dims[l]);
     }
 }
 
@@ -331,7 +345,9 @@ void dnn::set_dropout_masks(){
     vslDeleteStream(&rndStream);
 }
 
-void dnn::weights_update(const float &learning_rate){
+void dnn::gradient_descent_optimize(const float &initial_learning_rate,const int &num_epochs,const int &step){
+    // learning rate decay
+    float learning_rate=initial_learning_rate*(1-step*1.0/num_epochs)+0.01*initial_learning_rate;
     for(int l=1;l<n_layers;l++){
        // W[l]:=W[l]-learning_rate*dW[l]
        cblas_saxpy(layer_dims[l]*layer_dims[l-1],-learning_rate,dW[l],1,W[l],1); 
@@ -340,6 +356,52 @@ void dnn::weights_update(const float &learning_rate){
     }
 }
 
+void dnn::Adam_optimize(const float &initial_learning_rate,const float &beta_1,const float &beta_2,const int &num_epochs,const int &epoch_step,const int &train_step){ 
+    // learning rate decay
+    float learning_rate=initial_learning_rate*(1-epoch_step*1.0/num_epochs)+0.01*initial_learning_rate;
+
+    float bias_beta_1,bias_beta_2;
+    bias_beta_1=1.0/(1-pow(beta_1,train_step+1));
+    bias_beta_2=1.0/(1-pow(beta_2,train_step+1));
+    for(int l=1;l<n_layers;l++){
+      // VdW[l]=beta_1*VdW[l]
+      cblas_sscal(layer_dims[l]*layer_dims[l-1],beta_1,VdW[l],1);
+      // VdW[l]+=(1-beta_1)*dW[l]
+      cblas_saxpy(layer_dims[l]*layer_dims[l-1],(1-beta_1),dW[l],1,VdW[l],1); 
+      // Vdb[l]=beta_1*Vdb[l]
+      cblas_sscal(layer_dims[l],beta_1,Vdb[l],1);
+      // Vdb[l]+=(1-beta_1)*db[l]
+      cblas_saxpy(layer_dims[l],(1-beta_1),db[l],1,Vdb[l],1); 
+
+      // SdW[l]=beta_2*SdW[l]
+      cblas_sscal(layer_dims[l]*layer_dims[l-1],beta_2,SdW[l],1);
+      //dW[l] replaced by dW[l]*dW[l], (will not be used anymore)
+      vsMul(layer_dims[l]*layer_dims[l-1],dW[l],dW[l],dW[l]);
+      // SdW[l]+=(1-beta_2)*dW[l]
+      cblas_saxpy(layer_dims[l]*layer_dims[l-1],(1-beta_2),dW[l],1,SdW[l],1); 
+      // Sdb[l]=beta_2*Sdb[l]
+      cblas_sscal(layer_dims[l],beta_2,Sdb[l],1);
+      //db[l] replaced by db[l]*db[l], (will not be used anymore)
+      vsMul(layer_dims[l],db[l],db[l],db[l]);
+      // Sdb[l]+=(1-beta_2)*db[l]
+      cblas_saxpy(layer_dims[l],(1-beta_2),db[l],1,Sdb[l],1); 
+
+      // add bias correction
+      /*
+      cblas_sscal(layer_dims[l]*layer_dims[l-1], bias_beta_1,VdW[l],1);
+      cblas_sscal(layer_dims[l], bias_beta_1,Vdb[l],1);
+      cblas_sscal(layer_dims[l]*layer_dims[l-1], bias_beta_2,SdW[l],1);
+      cblas_sscal(layer_dims[l], bias_beta_2,Sdb[l],1);
+      */
+
+      // update the weights and bias
+      for(int i=0;i<layer_dims[l]*layer_dims[l-1];i++)
+	  W[l][i]-=learning_rate*VdW[l][i]/(sqrt(SdW[l][i])+1e-8);
+      for(int i=0;i<layer_dims[l];i++)
+          b[l][i]-=learning_rate*Vdb[l][i]/(sqrt(Sdb[l][i])+1e-8);
+    }
+
+}
 void dnn::initialize_layer_caches(const int &n_sample,const bool &is_bp){
     // initialize layer caches and layer gradients caches
     for(int l=0; l<n_layers; l++)
@@ -402,15 +464,10 @@ void dnn::train_and_dev(const vector<float> &_X_train,const vector<int> &_Y_trai
     // use num_dev_batches*batch_size for simplicity
     int num_dev_batches=n_dev/batch_size; 
 
-    float alpha,epsilon_0,epsilon_tau;
-    epsilon_0=learning_rate;
-    epsilon_tau=epsilon_0*0.01;
     for(int i=0; i<num_epochs+1; i++) {
         // shuffle training data sets for one epoch
         shuffle(X_train,Y_train,n_train);
         cost_train=0;
-	alpha=i*1.0/num_epochs;
-	learning_rate=(1-alpha)*epsilon_0+alpha*epsilon_tau;
         // batch training until all the data sets are used
         for(int s=0; s<num_train_batches; s++) {
             // batch feed A[0] from X_train
@@ -419,7 +476,8 @@ void dnn::train_and_dev(const vector<float> &_X_train,const vector<int> &_Y_trai
             multi_layers_forward(batch_size,false);
             multi_layers_backward(Y_batch,batch_size);
             cost_batch=cost_function(Y_batch,batch_size);
-            weights_update(learning_rate);
+	    //gradient_descent_optimize(learning_rate,num_epochs,i);
+	    Adam_optimize(learning_rate,0.9,0.999,num_epochs,i,s+i*batch_size);
             cost_train+=cost_batch;
         }
 

@@ -20,8 +20,8 @@ int main(int argc,char *argv[]) {
     // test with two hidden layers
     int n_hidden=2;
     vector<string> activation_types{"ReLU","sigmoid"};
-    vector<int> dim_hidden{256,128};
-    vector<float> keep_probs{0.8,0.6,0.9};  // keep probs for input and hidden layers
+    vector<int> dim_hidden{384,128};
+    vector<float> keep_probs{0.8,0.5,0.9};  // keep probs for input and hidden layers
 
     //dnn  clr(n_features,n_classes,n_hidden,dim_hidden,activation_types);
     dnn  clr(n_features,n_classes,n_hidden,dim_hidden,activation_types,keep_probs);
