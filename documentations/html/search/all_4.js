@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['_7ednn',['~dnn',['../classdnn.html#a3384dfd89ac2e10f6554e05a53b288ad',1,'dnn']]]
+  ['get_5fsoftmax',['get_softmax',['../classdnn.html#a919bcb8e48259d7a433677bce41b0a64',1,'dnn']]]
 ];

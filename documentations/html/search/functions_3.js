@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['_7ednn',['~dnn',['../classdnn.html#a3384dfd89ac2e10f6554e05a53b288ad',1,'dnn']]]
+  ['forward_5factivated_5fpropagate',['forward_activated_propagate',['../classdnn.html#a0b6f3f64459feb244ffa795c8eef91b3',1,'dnn']]]
 ];

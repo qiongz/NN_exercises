@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['dnn',['dnn',['../classdnn.html#ab6d436cbc35d10258bd8d3e314cb36b8',1,'dnn::dnn(int n_f, int n_c)'],['../classdnn.html#aae6e714fc63cc1b73b40510e5a3401c7',1,'dnn::dnn(int n_f, int n_c, int n_h, const vector&lt; int &gt; &amp;dims, const vector&lt; string &gt; &amp;act_types)'],['../classdnn.html#a657974689367069e38e600c594a461f0',1,'dnn::dnn(int n_f, int n_c, int n_h, const vector&lt; int &gt; &amp;dims, const vector&lt; string &gt; &amp;act_types, const vector&lt; float &gt; &amp;k_ps)']]]
+  ['backward_5fpropagate',['backward_propagate',['../classdnn.html#a6d76c251b70fb0423a3fb9c42af32752',1,'dnn']]],
+  ['batch',['batch',['../classdnn.html#afe3252fc51fda18ec793933157bad7b8',1,'dnn::batch(const float *X, const float *Y, float *X_batch, float *Y_batch, int batch_size, int batch_id)'],['../classdnn.html#a7e099c8aa579b99170b170f306029c5f',1,'dnn::batch(const float *X, float *X_batch, int batch_size, int batch_id)']]]
 ];

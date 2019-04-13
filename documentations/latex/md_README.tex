@@ -1,37 +1,43 @@
-# Neural network exercises
-Learning neural networks by exercises.
-## Prerequisties
-Libraries:
-* icc,mkl
+Learning neural networks by exercises. \subsection*{Prerequisties}
 
-## Installing
-sudo apt-get install g++ g++-multilib build-essential<br/>
-install icc,mkl<br/>
-make test_mlr test_ffnn<br/>
+Libraries\+:
+\begin{DoxyItemize}
+\item icc,mkl
+\end{DoxyItemize}
 
-## Datasets
-datasets/train.csv, datasets/test.csv
+\subsection*{Installing}
 
-the training/validation data sets uses the MNIST datasets in csv format:<br/>
-https://www.kaggle.com/c/digit-recognizer/data
+sudo apt-\/get install g++ g++-\/multilib build-\/essential~\newline
+ install icc,mkl~\newline
+ make test\+\_\+mlr test\+\_\+ffnn~\newline
 
-## Running the test
-### multi-classes logistic regression
-./test_mlr
-<pre><code>
+
+\subsection*{Datasets}
+
+datasets/train.\+csv, datasets/test.\+csv
+
+the training/validation data sets uses the M\+N\+I\+ST datasets in csv format\+:~\newline
+ \href{https://www.kaggle.com/c/digit-recognizer/data}{\tt https\+://www.\+kaggle.\+com/c/digit-\/recognizer/data}
+
+\subsection*{Running the test}
+
+\subsubsection*{multi-\/classes logistic regression}
+
+./test\+\_\+mlr 
+\begin{DoxyPre}{\ttfamily 
 Cost of train/validation at epoch    0 :  0.45934263 0.34229076 
 Cost of train/validation at epoch   10 :  0.25960219 0.28029829 
 Cost of train/validation at epoch   20 :  0.24500903 0.27580458 
 Cost of train/validation at epoch   30 :  0.23828110 0.27294943 
 validation set accuracy:0.925119
-Enter image id (0<=id<8400):<br/>
+Enter image id (0<=id<8400):~\newline
+
 0
-----------------------------
+----------------------------}\end{DoxyPre}
 
 
 
-
-            *********       
+\begin{DoxyPre}{\ttfamily             *********       
            ***********      
            ************     
            ************     
@@ -50,23 +56,27 @@ Enter image id (0<=id<8400):<br/>
    **********     ****      
    ********       *****     
     ****           ****     
-                    ***     
+                    ***}\end{DoxyPre}
 
 
 
-
-----------------------------
+\begin{DoxyPre}{\ttfamily ----------------------------
 Predicted: 2
-Actual: 2
+Actual: 2}\end{DoxyPre}
 
-</code></pre>
 
-### feed-forward neural network with two hidden-layers
-Initialize the hidden layer dimensions with {256,128}<br/>
-activation types with {"ReLU","sigmoid"}<br/>
-keep probabilities in dropout regularization with {0.9,0.6,0.8}:<br/>
-./test_ffnn -n 100 <br/>
-<pre><code>
+
+\begin{DoxyPre}{\ttfamily }\end{DoxyPre}
+
+
+\subsubsection*{feed-\/forward neural network with two hidden-\/layers}
+
+Initialize the hidden layer dimensions with \{256,128\}~\newline
+ activation types with \{\char`\"{}\+Re\+L\+U\char`\"{},\char`\"{}sigmoid\char`\"{}\}~\newline
+ keep probabilities in dropout regularization with \{0.\+9,0.\+6,0.\+8\}\+:~\newline
+ ./test\+\_\+ffnn -\/n 100 ~\newline
+ 
+\begin{DoxyPre}{\ttfamily 
 Cost of train/validation at epoch    0 :  0.88942140 0.34440878 
 Cost of train/validation at epoch   10 :  0.16244245 0.10217448 
 Cost of train/validation at epoch   20 :  0.10956403 0.08221784 
@@ -79,8 +89,9 @@ Cost of train/validation at epoch   80 :  0.05512367 0.05802767
 Cost of train/validation at epoch   90 :  0.05044307 0.05985889 
 Cost of train/validation at epoch  100 :  0.05259707 0.05880265 
 validation set accuracy:0.982143
-</code></pre>
-The accuracy is much better than the logistic regression
+}\end{DoxyPre}
+ The accuracy is much better than the logistic regression
 
-## License
-[MIT](https://choosealicense.com/licenses/mit/)
+\subsection*{License}
+
+\href{https://choosealicense.com/licenses/mit/}{\tt M\+IT} 

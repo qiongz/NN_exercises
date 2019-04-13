@@ -69,26 +69,20 @@ $(function() {
 <h2>Installing</h2>
 <p>sudo apt-get install g++ g++-multilib build-essential<br />
  install icc,mkl<br />
- make test_lr test_fnn<br />
+ make test_mlr test_ffnn<br />
 </p>
 <h2>Datasets</h2>
-<p>datasets/train.csv, datasets/dev.csv</p>
+<p>datasets/train.csv, datasets/test.csv</p>
 <p>the training/validation data sets uses the MNIST datasets in csv format:<br />
  <a href="https://www.kaggle.com/c/digit-recognizer/data">https://www.kaggle.com/c/digit-recognizer/data</a></p>
 <h2>Running the test</h2>
 <h3>multi-classes logistic regression</h3>
 <p>./test_mlr </p><pre><code>
-Cost of train/validation at epoch    0 :  1.53400493 1.06833994
-Cost of train/validation at epoch   50 :  0.32598802 0.32673740
-Cost of train/validation at epoch  100 :  0.29563040 0.30209836
-Cost of train/validation at epoch  150 :  0.28177088 0.29180923
-Cost of train/validation at epoch  200 :  0.27304924 0.28599998
-Cost of train/validation at epoch  250 :  0.26649177 0.28233498
-Cost of train/validation at epoch  300 :  0.26153630 0.27988511
-Cost of train/validation at epoch  350 :  0.25738254 0.27816206
-Cost of train/validation at epoch  400 :  0.25402132 0.27682486
-Cost of train/validation at epoch  450 :  0.25106934 0.27578330
-validation set accuracy:0.923571
+Cost of train/validation at epoch    0 :  0.45934263 0.34229076 
+Cost of train/validation at epoch   10 :  0.25960219 0.28029829 
+Cost of train/validation at epoch   20 :  0.24500903 0.27580458 
+Cost of train/validation at epoch   30 :  0.23828110 0.27294943 
+validation set accuracy:0.925119
 Enter image id (0&lt;=id&lt;8400):<br />
 
 0
@@ -114,22 +108,24 @@ Enter image id (0&lt;=id&lt;8400):<br />
                     ***</code></pre><pre><code>----------------------------
 Predicted: 2
 Actual: 2</code></pre><pre><code></code></pre><h3>feed-forward neural network with two hidden-layers</h3>
-<p>Initialize the hidden layer dimensions with {256,64}<br />
+<p>Initialize the hidden layer dimensions with {256,128}<br />
  activation types with {"ReLU","sigmoid"}<br />
- keep probabilities in dropout regularization with {0.7,0.8}:<br />
- ./test_ffnn </p><pre><code>
-Cost of train/validation at epoch    0 :  2.26165628 2.17197156
-Cost of train/validation at epoch   50 :  0.26327664 0.26657039
-Cost of train/validation at epoch  100 :  0.17473789 0.18758176
-Cost of train/validation at epoch  150 :  0.12650602 0.14836265
-Cost of train/validation at epoch  200 :  0.09608501 0.12560201
-Cost of train/validation at epoch  250 :  0.07490626 0.11114754
-Cost of train/validation at epoch  300 :  0.05939516 0.10186721
-Cost of train/validation at epoch  350 :  0.04772070 0.09572258
-Cost of train/validation at epoch  400 :  0.03852429 0.09181294
-Cost of train/validation at epoch  450 :  0.03158921 0.08901041
-validation set accuracy:0.97369
-</code></pre><p> The accuracy is better than the logistic regression</p>
+ keep probabilities in dropout regularization with {0.9,0.6,0.8}:<br />
+ ./test_ffnn -n 100 <br />
+ </p><pre><code>
+Cost of train/validation at epoch    0 :  0.88942140 0.34440878 
+Cost of train/validation at epoch   10 :  0.16244245 0.10217448 
+Cost of train/validation at epoch   20 :  0.10956403 0.08221784 
+Cost of train/validation at epoch   30 :  0.09188860 0.06962664 
+Cost of train/validation at epoch   40 :  0.07479116 0.06810240 
+Cost of train/validation at epoch   50 :  0.06701186 0.06320439 
+Cost of train/validation at epoch   60 :  0.06487222 0.06216515 
+Cost of train/validation at epoch   70 :  0.05761564 0.06120869 
+Cost of train/validation at epoch   80 :  0.05512367 0.05802767 
+Cost of train/validation at epoch   90 :  0.05044307 0.05985889 
+Cost of train/validation at epoch  100 :  0.05259707 0.05880265 
+validation set accuracy:0.982143
+</code></pre><p> The accuracy is much better than the logistic regression</p>
 <h2>License</h2>
 <p><a href="https://choosealicense.com/licenses/mit/">MIT</a> </p>
 </div></div><!-- contents -->

@@ -1,0 +1,90 @@
+\begin{theindex}
+
+  \item {backward\+\_\+propagate}
+    \subitem {dnn}, \hyperpage{9}
+  \item {batch}
+    \subitem {dnn}, \hyperpage{10}
+
+  \indexspace
+
+  \item {cost\+\_\+function}
+    \subitem {dnn}, \hyperpage{11}
+
+  \indexspace
+
+  \item {dnn}, \hyperpage{7}
+    \subitem {backward\+\_\+propagate}, \hyperpage{9}
+    \subitem {batch}, \hyperpage{10}
+    \subitem {cost\+\_\+function}, \hyperpage{11}
+    \subitem {dnn}, \hyperpage{8, 9}
+    \subitem {forward\+\_\+activated\+\_\+propagate}, \hyperpage{11}
+    \subitem {get\+\_\+softmax}, \hyperpage{12}
+    \subitem {initialize\+\_\+weights}, \hyperpage{12}
+    \subitem {max}, \hyperpage{12}
+    \subitem {predict}, \hyperpage{13}
+    \subitem {predict\+\_\+accuracy}, \hyperpage{13}
+    \subitem {Re\+L\+U\+\_\+activate}, \hyperpage{14}
+    \subitem {Re\+L\+U\+\_\+backward\+\_\+activate}, \hyperpage{14}
+    \subitem {set\+\_\+dropout\+\_\+masks}, \hyperpage{15}
+    \subitem {shuffle}, \hyperpage{15}
+    \subitem {sigmoid\+\_\+activate}, \hyperpage{15}
+    \subitem {sigmoid\+\_\+backward\+\_\+activate}, \hyperpage{16}
+    \subitem {train\+\_\+and\+\_\+dev}, \hyperpage{17}
+    \subitem {weights\+\_\+update}, \hyperpage{17}
+
+  \indexspace
+
+  \item {forward\+\_\+activated\+\_\+propagate}
+    \subitem {dnn}, \hyperpage{11}
+
+  \indexspace
+
+  \item {get\+\_\+softmax}
+    \subitem {dnn}, \hyperpage{12}
+
+  \indexspace
+
+  \item {initialize\+\_\+weights}
+    \subitem {dnn}, \hyperpage{12}
+
+  \indexspace
+
+  \item {max}
+    \subitem {dnn}, \hyperpage{12}
+
+  \indexspace
+
+  \item {predict}
+    \subitem {dnn}, \hyperpage{13}
+  \item {predict\+\_\+accuracy}
+    \subitem {dnn}, \hyperpage{13}
+
+  \indexspace
+
+  \item {Re\+L\+U\+\_\+activate}
+    \subitem {dnn}, \hyperpage{14}
+  \item {Re\+L\+U\+\_\+backward\+\_\+activate}
+    \subitem {dnn}, \hyperpage{14}
+
+  \indexspace
+
+  \item {set\+\_\+dropout\+\_\+masks}
+    \subitem {dnn}, \hyperpage{15}
+  \item {shuffle}
+    \subitem {dnn}, \hyperpage{15}
+  \item {sigmoid\+\_\+activate}
+    \subitem {dnn}, \hyperpage{15}
+  \item {sigmoid\+\_\+backward\+\_\+activate}
+    \subitem {dnn}, \hyperpage{16}
+
+  \indexspace
+
+  \item {train\+\_\+and\+\_\+dev}
+    \subitem {dnn}, \hyperpage{17}
+
+  \indexspace
+
+  \item {weights\+\_\+update}
+    \subitem {dnn}, \hyperpage{17}
+
+\end{theindex}

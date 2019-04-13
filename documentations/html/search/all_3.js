@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['train_5fand_5fdev',['train_and_dev',['../classdnn.html#a0e498a3b9d592bd9d217bd0c8f4fa94a',1,'dnn']]]
+  ['forward_5factivated_5fpropagate',['forward_activated_propagate',['../classdnn.html#a0b6f3f64459feb244ffa795c8eef91b3',1,'dnn']]]
 ];

@@ -12,11 +12,59 @@
 \mbox{\Hypertarget{classdnn_a3384dfd89ac2e10f6554e05a53b288ad}\label{classdnn_a3384dfd89ac2e10f6554e05a53b288ad}} 
 \hyperlink{classdnn_a3384dfd89ac2e10f6554e05a53b288ad}{$\sim$dnn} ()
 \begin{DoxyCompactList}\small\item\em destructor, clean the memory space \end{DoxyCompactList}\item 
-void \hyperlink{classdnn_a0e498a3b9d592bd9d217bd0c8f4fa94a}{train\+\_\+and\+\_\+dev} (const vector$<$ float $>$ \&X\+\_\+train, const vector$<$ int $>$ \&Y\+\_\+train, const vector$<$ float $>$ \&X\+\_\+dev, const vector$<$ int $>$ \&Y\+\_\+dev, const int \&n\+\_\+train, const int \&n\+\_\+dev, const int num\+\_\+epochs, const float learning\+\_\+rate, float lambda, int batch\+\_\+size, bool print\+\_\+cost)
+void \hyperlink{classdnn_a9377e30990622d77b1ca09c1b1ab6f8a}{train\+\_\+and\+\_\+dev} (const vector$<$ float $>$ \&X\+\_\+train, const vector$<$ int $>$ \&Y\+\_\+train, const vector$<$ float $>$ \&X\+\_\+dev, const vector$<$ int $>$ \&Y\+\_\+dev, const int \&n\+\_\+train, const int \&n\+\_\+dev, const int num\+\_\+epochs, float learning\+\_\+rate, float lambda, int batch\+\_\+size, bool print\+\_\+cost)
 \item 
 void \hyperlink{classdnn_a9809de12b4182b61b98e652b0e61856c}{predict} (const vector$<$ float $>$ \&X, vector$<$ int $>$ \&Y\+\_\+prediction, const int \&n\+\_\+sample)
 \item 
 float \hyperlink{classdnn_a7f12d5a496ec38e1b4def98908e32236}{predict\+\_\+accuracy} (const vector$<$ float $>$ \&\+\_\+X, const vector$<$ int $>$ \&Y, vector$<$ int $>$ \&Y\+\_\+prediction, const int \&n\+\_\+sample)
+\item 
+void \hyperlink{classdnn_aea2749931a0cb4bd48112371852633a9}{initialize\+\_\+weights} ()
+\item 
+void \hyperlink{classdnn_a09a39f5b6f0b29af3ae470a907e3c097}{shuffle} (float $\ast$X, float $\ast$Y, int n\+\_\+sample)
+\item 
+void \hyperlink{classdnn_afe3252fc51fda18ec793933157bad7b8}{batch} (const float $\ast$X, const float $\ast$Y, float $\ast$X\+\_\+batch, float $\ast$Y\+\_\+batch, int batch\+\_\+size, int batch\+\_\+id)
+\item 
+void \hyperlink{classdnn_a7e099c8aa579b99170b170f306029c5f}{batch} (const float $\ast$X, float $\ast$X\+\_\+batch, int batch\+\_\+size, int batch\+\_\+id)
+\item 
+float \hyperlink{classdnn_acb3008f68cd011e0820612c972fae41d}{max} (const float $\ast$x, int range, int \&index\+\_\+max)
+\item 
+void \hyperlink{classdnn_ac7d070a8383387047777429750d31c2e}{sigmoid\+\_\+activate} (const int \&l, const int \&n\+\_\+sample)
+\item 
+void \hyperlink{classdnn_abb924e8a0917dd8a43c057d6f750ee2f}{Re\+L\+U\+\_\+activate} (const int \&l, const int \&n\+\_\+sample)
+\item 
+void \hyperlink{classdnn_ad01dcf32fdb9321ad8396bafb0495f6b}{sigmoid\+\_\+backward\+\_\+activate} (const int \&l, const int \&n\+\_\+sample)
+\item 
+void \hyperlink{classdnn_a2fe2905bc80e29dd50130bc41485adf4}{Re\+L\+U\+\_\+backward\+\_\+activate} (const int \&l, const int \&n\+\_\+sample)
+\item 
+void \hyperlink{classdnn_a919bcb8e48259d7a433677bce41b0a64}{get\+\_\+softmax} (const int \&n\+\_\+sample)
+\item 
+void \hyperlink{classdnn_a0b6f3f64459feb244ffa795c8eef91b3}{forward\+\_\+activated\+\_\+propagate} (const int \&l, const int \&n\+\_\+sample, const bool \&eval)
+\item 
+void \hyperlink{classdnn_a6d76c251b70fb0423a3fb9c42af32752}{backward\+\_\+propagate} (const int \&l, const int \&n\+\_\+sample)
+\item 
+\mbox{\Hypertarget{classdnn_ad618d5da89744e6bc10e217d81d99605}\label{classdnn_ad618d5da89744e6bc10e217d81d99605}} 
+void \hyperlink{classdnn_ad618d5da89744e6bc10e217d81d99605}{multi\+\_\+layers\+\_\+forward} (const int \&n\+\_\+sample, const bool \&eval)
+\begin{DoxyCompactList}\small\item\em multi layers forward propagate and activation \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classdnn_aeea24db0c4f09f7697ad6c5881d1aabb}\label{classdnn_aeea24db0c4f09f7697ad6c5881d1aabb}} 
+void \hyperlink{classdnn_aeea24db0c4f09f7697ad6c5881d1aabb}{multi\+\_\+layers\+\_\+backward} (const float $\ast$Y, const int \&n\+\_\+sample)
+\begin{DoxyCompactList}\small\item\em multi layers backward propagate to get gradients \end{DoxyCompactList}\item 
+void \hyperlink{classdnn_a8cf7454d21ad0b081e7f2b18619ed2cd}{weights\+\_\+update} (const float \&learning\+\_\+rate)
+\item 
+\mbox{\Hypertarget{classdnn_a428a2e13de6a707c98ed6506480dd6e5}\label{classdnn_a428a2e13de6a707c98ed6506480dd6e5}} 
+void \hyperlink{classdnn_a428a2e13de6a707c98ed6506480dd6e5}{initialize\+\_\+layer\+\_\+caches} (const int \&n\+\_\+sample, const bool \&is\+\_\+bp)
+\begin{DoxyCompactList}\small\item\em allocate memory space for layer caches A,dZ \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classdnn_a177251ed1f2ed2fb94d061938aad030e}\label{classdnn_a177251ed1f2ed2fb94d061938aad030e}} 
+void \hyperlink{classdnn_a177251ed1f2ed2fb94d061938aad030e}{clear\+\_\+layer\+\_\+caches} ()
+\begin{DoxyCompactList}\small\item\em clear layer caches A,dZ \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classdnn_ac75b380bdca4f7eb811a97db1dd499bb}\label{classdnn_ac75b380bdca4f7eb811a97db1dd499bb}} 
+void \hyperlink{classdnn_ac75b380bdca4f7eb811a97db1dd499bb}{initialize\+\_\+dropout\+\_\+masks} ()
+\begin{DoxyCompactList}\small\item\em allocate memory space for dropout masks DropM \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classdnn_a4fdc890e9dcc625e7474b1f3b4a0e7fb}\label{classdnn_a4fdc890e9dcc625e7474b1f3b4a0e7fb}} 
+void \hyperlink{classdnn_a4fdc890e9dcc625e7474b1f3b4a0e7fb}{clear\+\_\+dropout\+\_\+masks} ()
+\begin{DoxyCompactList}\small\item\em clear DropM \end{DoxyCompactList}\item 
+void \hyperlink{classdnn_a3b76e71899549d8b493ebba21e57816a}{set\+\_\+dropout\+\_\+masks} ()
+\item 
+float \hyperlink{classdnn_a90021be0d55ab9b68b283d39eac19818}{cost\+\_\+function} (const float $\ast$Y, const int \&n\+\_\+sample)
 \end{DoxyCompactItemize}
 
 
@@ -77,6 +125,184 @@ constructor with hidden layer dimensions, activation types and dropout keep\+\_\
 
 
 \subsection{Member Function Documentation}
+\mbox{\Hypertarget{classdnn_a6d76c251b70fb0423a3fb9c42af32752}\label{classdnn_a6d76c251b70fb0423a3fb9c42af32752}} 
+\index{dnn@{dnn}!backward\+\_\+propagate@{backward\+\_\+propagate}}
+\index{backward\+\_\+propagate@{backward\+\_\+propagate}!dnn@{dnn}}
+\subsubsection{\texorpdfstring{backward\+\_\+propagate()}{backward\_propagate()}}
+{\footnotesize\ttfamily void dnn\+::backward\+\_\+propagate (\begin{DoxyParamCaption}\item[{const int \&}]{l,  }\item[{const int \&}]{n\+\_\+sample }\end{DoxyParamCaption})}
+
+backward propagate for each layer ~\newline
+ if J is the total mean cost, denote all ~\newline
+ $\partial{J}/\partial{A}\to dA$, $\partial{J}/\partial{Z}\to dZ$, ~\newline
+ $\partial{J}/\partial{W}\to dW$, $\partial{J}/\partial{b}\to db$, ~\newline
+ $\partial{A}/\partial{Z}\to dF$ ~\newline
+ and denote layer\+\_\+dims\mbox{[}l\mbox{]}-\/$>$n\+\_\+\mbox{[}l\mbox{]}, $\ast$ for dot product, .$\ast$ for element-\/wise product ~\newline
+ input\+: dZ\mbox{[}l\mbox{]},A\mbox{[}l-\/1\mbox{]},W\mbox{[}l\mbox{]} ~\newline
+
+
+update\+: ~\newline
+ db\mbox{[}l\mbox{]}(n\mbox{[}l\mbox{]})=sum(dZ\mbox{[}l\mbox{]}(n\+\_\+sample,n\mbox{[}l\mbox{]}),axis=0) ~\newline
+ dW\mbox{[}l\mbox{]}(n\mbox{[}l\mbox{]},n\mbox{[}l-\/1\mbox{]})=dZ\mbox{[}l\mbox{]}(n\+\_\+sample,n\mbox{[}l\mbox{]}).T$\ast$A\mbox{[}l-\/1\mbox{]}(n\+\_\+sample,n\mbox{[}l-\/1\mbox{]}) ~\newline
+ dF=activation\+\_\+backward(A\mbox{[}l-\/1\mbox{]}(n\+\_\+sample,n\mbox{[}l-\/1\mbox{]}) ~\newline
+ dZ\mbox{[}l-\/1\mbox{]}(n\+\_\+sample,n\mbox{[}l\mbox{]})=(dZ\mbox{[}l\mbox{]}(n\+\_\+sample,n\mbox{[}l\mbox{]})$\ast$W\mbox{[}l\mbox{]}(n\mbox{[}l\mbox{]},n\mbox{[}l-\/1\mbox{]})).$\ast$dF(n\+\_\+sample,n\mbox{[}l-\/1\mbox{]}) ~\newline
+
+
+output\+: dZ\mbox{[}l-\/1\mbox{]},dW\mbox{[}l\mbox{]},db\mbox{[}l\mbox{]} ~\newline
+ 
+\begin{DoxyParams}{Parameters}
+{\em l} & layer index \\
+\hline
+{\em n\+\_\+sample} & No. of samples in the datasets \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+dZ\mbox{[}l-\/1\mbox{]},dW\mbox{[}l\mbox{]},db\mbox{[}l\mbox{]} updated 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classdnn_afe3252fc51fda18ec793933157bad7b8}\label{classdnn_afe3252fc51fda18ec793933157bad7b8}} 
+\index{dnn@{dnn}!batch@{batch}}
+\index{batch@{batch}!dnn@{dnn}}
+\subsubsection{\texorpdfstring{batch()}{batch()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void dnn\+::batch (\begin{DoxyParamCaption}\item[{const float $\ast$}]{X,  }\item[{const float $\ast$}]{Y,  }\item[{float $\ast$}]{X\+\_\+batch,  }\item[{float $\ast$}]{Y\+\_\+batch,  }\item[{int}]{batch\+\_\+size,  }\item[{int}]{batch\+\_\+id }\end{DoxyParamCaption})}
+
+Obtain a batch datasets from the full datasets (used for training/developing) 
+\begin{DoxyParams}{Parameters}
+{\em X} & pointer to data X \\
+\hline
+{\em Y} & pointer to data Y \\
+\hline
+{\em X\+\_\+batch} & pointer to datasets batched from X \\
+\hline
+{\em Y\+\_\+batch} & pointer to datasets batched from Y \\
+\hline
+{\em batch\+\_\+size} & batch size \\
+\hline
+{\em batch\+\_\+id} & No. of batches extracted, used as an offset \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+batched dataset stored in X\+\_\+batch,Y\+\_\+batch 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classdnn_a7e099c8aa579b99170b170f306029c5f}\label{classdnn_a7e099c8aa579b99170b170f306029c5f}} 
+\index{dnn@{dnn}!batch@{batch}}
+\index{batch@{batch}!dnn@{dnn}}
+\subsubsection{\texorpdfstring{batch()}{batch()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void dnn\+::batch (\begin{DoxyParamCaption}\item[{const float $\ast$}]{X,  }\item[{float $\ast$}]{X\+\_\+batch,  }\item[{int}]{batch\+\_\+size,  }\item[{int}]{batch\+\_\+id }\end{DoxyParamCaption})}
+
+Obtain a batch datasets from the full datasets (used for predicting) 
+\begin{DoxyParams}{Parameters}
+{\em X} & pointer to data X \\
+\hline
+{\em X\+\_\+batch} & pointer to datasets batched from X \\
+\hline
+{\em batch\+\_\+size} & batch size \\
+\hline
+{\em batch\+\_\+id} & No. of batches extracted, used as an offset \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+batched dataset stored in X\+\_\+batch 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classdnn_a90021be0d55ab9b68b283d39eac19818}\label{classdnn_a90021be0d55ab9b68b283d39eac19818}} 
+\index{dnn@{dnn}!cost\+\_\+function@{cost\+\_\+function}}
+\index{cost\+\_\+function@{cost\+\_\+function}!dnn@{dnn}}
+\subsubsection{\texorpdfstring{cost\+\_\+function()}{cost\_function()}}
+{\footnotesize\ttfamily float dnn\+::cost\+\_\+function (\begin{DoxyParamCaption}\item[{const float $\ast$}]{Y,  }\item[{const int \&}]{n\+\_\+sample }\end{DoxyParamCaption})}
+
+Calculate the mean cost using the cross-\/entropy loss ~\newline
+ input\+: A\mbox{[}n\+\_\+layers-\/1\mbox{]}, Y ~\newline
+
+
+update\+: ~\newline
+ J=-\/Y.$\ast$log(A\mbox{[}n\+\_\+layers-\/1\mbox{]}) ~\newline
+ cost=sum(\+J)/n\+\_\+sample ~\newline
+
+
+output\+: 
+\begin{DoxyParams}{Parameters}
+{\em Y} & pointer to the datasets Y \\
+\hline
+{\em n\+\_\+sample} & No. of samples in the datasets  the mean cost \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classdnn_a0b6f3f64459feb244ffa795c8eef91b3}\label{classdnn_a0b6f3f64459feb244ffa795c8eef91b3}} 
+\index{dnn@{dnn}!forward\+\_\+activated\+\_\+propagate@{forward\+\_\+activated\+\_\+propagate}}
+\index{forward\+\_\+activated\+\_\+propagate@{forward\+\_\+activated\+\_\+propagate}!dnn@{dnn}}
+\subsubsection{\texorpdfstring{forward\+\_\+activated\+\_\+propagate()}{forward\_activated\_propagate()}}
+{\footnotesize\ttfamily void dnn\+::forward\+\_\+activated\+\_\+propagate (\begin{DoxyParamCaption}\item[{const int \&}]{l,  }\item[{const int \&}]{n\+\_\+sample,  }\item[{const bool \&}]{eval }\end{DoxyParamCaption})}
+
+Forward propagate and activation for each layer ~\newline
+ input\+: A\mbox{[}l-\/1\mbox{]},W\mbox{[}l\mbox{]},b\mbox{[}l\mbox{]},DropM\mbox{[}l-\/1\mbox{]} ~\newline
+
+
+update\+: ~\newline
+ if dropout==true\+: A\mbox{[}l-\/1\mbox{]}=A\mbox{[}l-\/1\mbox{]}.$\ast$\+DropM\mbox{[}l-\/1\mbox{]} ~\newline
+ A\mbox{[}l\mbox{]}=activation\+\_\+function(W\mbox{[}l\mbox{]}.T$\ast$A\mbox{[}l-\/1\mbox{]}+b\mbox{[}l\mbox{]}) ~\newline
+
+
+output\+: A\mbox{[}l\mbox{]} ~\newline
+ 
+\begin{DoxyParams}{Parameters}
+{\em l} & layer index \\
+\hline
+{\em n\+\_\+sample} & No. of samples in the datasets \\
+\hline
+{\em eval} & if eval==true, dropout is not used \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\mbox{[}l\mbox{]} updated 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classdnn_a919bcb8e48259d7a433677bce41b0a64}\label{classdnn_a919bcb8e48259d7a433677bce41b0a64}} 
+\index{dnn@{dnn}!get\+\_\+softmax@{get\+\_\+softmax}}
+\index{get\+\_\+softmax@{get\+\_\+softmax}!dnn@{dnn}}
+\subsubsection{\texorpdfstring{get\+\_\+softmax()}{get\_softmax()}}
+{\footnotesize\ttfamily void dnn\+::get\+\_\+softmax (\begin{DoxyParamCaption}\item[{const int \&}]{n\+\_\+sample }\end{DoxyParamCaption})}
+
+Calculate the softmax of the given(by default the final) layer ~\newline
+ l=n\+\_\+layers-\/1 ~\newline
+ input\+: Z\mbox{[}l\mbox{]} (stored in A\mbox{[}l\mbox{]}) ~\newline
+
+
+update\+: ~\newline
+ A\mbox{[}l\mbox{]}\mbox{[}i\mbox{]}= exp(\+Z\mbox{[}l\mbox{]}\mbox{[}i\mbox{]})/(exp(\+Z\mbox{[}l\mbox{]}\mbox{[}i\mbox{]})) ~\newline
+
+
+output\+: A\mbox{[}l\mbox{]} ~\newline
+ 
+\begin{DoxyParams}{Parameters}
+{\em n\+\_\+sample} & No. of samples in the datasets \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\mbox{[}l\mbox{]} stored with the softmax neurons 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classdnn_aea2749931a0cb4bd48112371852633a9}\label{classdnn_aea2749931a0cb4bd48112371852633a9}} 
+\index{dnn@{dnn}!initialize\+\_\+weights@{initialize\+\_\+weights}}
+\index{initialize\+\_\+weights@{initialize\+\_\+weights}!dnn@{dnn}}
+\subsubsection{\texorpdfstring{initialize\+\_\+weights()}{initialize\_weights()}}
+{\footnotesize\ttfamily void dnn\+::initialize\+\_\+weights (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Allocate memory space for W,dW,b,db, ~\newline
+ initialize weights W with random ~\newline
+ normal distributions and b with zeros ~\newline
+ \mbox{\Hypertarget{classdnn_acb3008f68cd011e0820612c972fae41d}\label{classdnn_acb3008f68cd011e0820612c972fae41d}} 
+\index{dnn@{dnn}!max@{max}}
+\index{max@{max}!dnn@{dnn}}
+\subsubsection{\texorpdfstring{max()}{max()}}
+{\footnotesize\ttfamily float dnn\+::max (\begin{DoxyParamCaption}\item[{const float $\ast$}]{x,  }\item[{int}]{range,  }\item[{int \&}]{index\+\_\+max }\end{DoxyParamCaption})}
+
+Get the maximum value and index from the array 
+\begin{DoxyParams}{Parameters}
+{\em x} & pointer to the array \\
+\hline
+{\em range} & range of array \\
+\hline
+{\em index\+\_\+max} & reference pointer to argmax of the array \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the maximum value,argmax of the array store in index\+\_\+max 
+\end{DoxyReturn}
 \mbox{\Hypertarget{classdnn_a9809de12b4182b61b98e652b0e61856c}\label{classdnn_a9809de12b4182b61b98e652b0e61856c}} 
 \index{dnn@{dnn}!predict@{predict}}
 \index{predict@{predict}!dnn@{dnn}}
@@ -115,11 +341,142 @@ Predict and calculate the prediction accuracy for the given labeled datasets
 \begin{DoxyReturn}{Returns}
 accuracy , and the predicted labels stored in Y\+\_\+prediction 
 \end{DoxyReturn}
-\mbox{\Hypertarget{classdnn_a0e498a3b9d592bd9d217bd0c8f4fa94a}\label{classdnn_a0e498a3b9d592bd9d217bd0c8f4fa94a}} 
+\mbox{\Hypertarget{classdnn_abb924e8a0917dd8a43c057d6f750ee2f}\label{classdnn_abb924e8a0917dd8a43c057d6f750ee2f}} 
+\index{dnn@{dnn}!Re\+L\+U\+\_\+activate@{Re\+L\+U\+\_\+activate}}
+\index{Re\+L\+U\+\_\+activate@{Re\+L\+U\+\_\+activate}!dnn@{dnn}}
+\subsubsection{\texorpdfstring{Re\+L\+U\+\_\+activate()}{ReLU\_activate()}}
+{\footnotesize\ttfamily void dnn\+::\+Re\+L\+U\+\_\+activate (\begin{DoxyParamCaption}\item[{const int \&}]{l,  }\item[{const int \&}]{n\+\_\+sample }\end{DoxyParamCaption})}
+
+Perform Re\+LU activation for the given layer ~\newline
+ input\+: Z\mbox{[}l\mbox{]} (stored in A\mbox{[}l\mbox{]}) ~\newline
+
+
+update\+: ~\newline
+ A\mbox{[}l\mbox{]}= Z\mbox{[}l\mbox{]}, if Z\mbox{[}l\mbox{]}$>$0 ~\newline
+ 0 , otherwise ~\newline
+
+
+output\+: A\mbox{[}l\mbox{]} ~\newline
+ 
+\begin{DoxyParams}{Parameters}
+{\em l} & layer index \\
+\hline
+{\em n\+\_\+sample} & No. of samples in the datasets \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\mbox{[}l\mbox{]} stored with activated neurons 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classdnn_a2fe2905bc80e29dd50130bc41485adf4}\label{classdnn_a2fe2905bc80e29dd50130bc41485adf4}} 
+\index{dnn@{dnn}!Re\+L\+U\+\_\+backward\+\_\+activate@{Re\+L\+U\+\_\+backward\+\_\+activate}}
+\index{Re\+L\+U\+\_\+backward\+\_\+activate@{Re\+L\+U\+\_\+backward\+\_\+activate}!dnn@{dnn}}
+\subsubsection{\texorpdfstring{Re\+L\+U\+\_\+backward\+\_\+activate()}{ReLU\_backward\_activate()}}
+{\footnotesize\ttfamily void dnn\+::\+Re\+L\+U\+\_\+backward\+\_\+activate (\begin{DoxyParamCaption}\item[{const int \&}]{l,  }\item[{const int \&}]{n\+\_\+sample }\end{DoxyParamCaption})}
+
+Perform Re\+LU backward gradients calculation ~\newline
+ input\+: A\mbox{[}l\mbox{]} ~\newline
+
+
+update\+: ~\newline
+ dF= 1, if A\mbox{[}l\mbox{]}$>$0 ~\newline
+ 0, otherwise ~\newline
+ dZ\mbox{[}l\mbox{]}=dF.$\ast$dZ\mbox{[}l\mbox{]} ~\newline
+
+
+output\+:dZ\mbox{[}l\mbox{]} ~\newline
+ 
+\begin{DoxyParams}{Parameters}
+{\em l} & layer index \\
+\hline
+{\em n\+\_\+sample} & No. of samples in the batch \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+dZ\mbox{[}l\mbox{]} updated 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classdnn_a3b76e71899549d8b493ebba21e57816a}\label{classdnn_a3b76e71899549d8b493ebba21e57816a}} 
+\index{dnn@{dnn}!set\+\_\+dropout\+\_\+masks@{set\+\_\+dropout\+\_\+masks}}
+\index{set\+\_\+dropout\+\_\+masks@{set\+\_\+dropout\+\_\+masks}!dnn@{dnn}}
+\subsubsection{\texorpdfstring{set\+\_\+dropout\+\_\+masks()}{set\_dropout\_masks()}}
+{\footnotesize\ttfamily void dnn\+::set\+\_\+dropout\+\_\+masks (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Initialize dropout masks DropM ~\newline
+ if No. of hidden layers $>$0 and dropout==true ~\newline
+ assign 1/0 according to keep probabilities keep\+\_\+probs ~\newline
+ \mbox{\Hypertarget{classdnn_a09a39f5b6f0b29af3ae470a907e3c097}\label{classdnn_a09a39f5b6f0b29af3ae470a907e3c097}} 
+\index{dnn@{dnn}!shuffle@{shuffle}}
+\index{shuffle@{shuffle}!dnn@{dnn}}
+\subsubsection{\texorpdfstring{shuffle()}{shuffle()}}
+{\footnotesize\ttfamily void dnn\+::shuffle (\begin{DoxyParamCaption}\item[{float $\ast$}]{X,  }\item[{float $\ast$}]{Y,  }\item[{int}]{n\+\_\+sample }\end{DoxyParamCaption})}
+
+Shuffle the datasets 
+\begin{DoxyParams}{Parameters}
+{\em X} & data X \\
+\hline
+{\em Y} & data Y \\
+\hline
+{\em n\+\_\+sample} & range (or No. of samples) in X,Y to be shuffled \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+X,Y being shuffled 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classdnn_ac7d070a8383387047777429750d31c2e}\label{classdnn_ac7d070a8383387047777429750d31c2e}} 
+\index{dnn@{dnn}!sigmoid\+\_\+activate@{sigmoid\+\_\+activate}}
+\index{sigmoid\+\_\+activate@{sigmoid\+\_\+activate}!dnn@{dnn}}
+\subsubsection{\texorpdfstring{sigmoid\+\_\+activate()}{sigmoid\_activate()}}
+{\footnotesize\ttfamily void dnn\+::sigmoid\+\_\+activate (\begin{DoxyParamCaption}\item[{const int \&}]{l,  }\item[{const int \&}]{n\+\_\+sample }\end{DoxyParamCaption})}
+
+Perform sigmoid activation for the given layer ~\newline
+ input\+: Z\mbox{[}l\mbox{]} (stored in A\mbox{[}l\mbox{]}) ~\newline
+
+
+update\+: ~\newline
+ A\mbox{[}l\mbox{]}=1/(1+exp(-\/Z\mbox{[}l\mbox{]}) ~\newline
+
+
+output\+: A\mbox{[}l\mbox{]} ~\newline
+ 
+\begin{DoxyParams}{Parameters}
+{\em l} & layer index \\
+\hline
+{\em n\+\_\+sample} & No. of samples in the datasets \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A\mbox{[}l\mbox{]} stored with activated neurons 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classdnn_ad01dcf32fdb9321ad8396bafb0495f6b}\label{classdnn_ad01dcf32fdb9321ad8396bafb0495f6b}} 
+\index{dnn@{dnn}!sigmoid\+\_\+backward\+\_\+activate@{sigmoid\+\_\+backward\+\_\+activate}}
+\index{sigmoid\+\_\+backward\+\_\+activate@{sigmoid\+\_\+backward\+\_\+activate}!dnn@{dnn}}
+\subsubsection{\texorpdfstring{sigmoid\+\_\+backward\+\_\+activate()}{sigmoid\_backward\_activate()}}
+{\footnotesize\ttfamily void dnn\+::sigmoid\+\_\+backward\+\_\+activate (\begin{DoxyParamCaption}\item[{const int \&}]{l,  }\item[{const int \&}]{n\+\_\+sample }\end{DoxyParamCaption})}
+
+Perform sigmoid backward gradients calculation ~\newline
+ input\+: A\mbox{[}l\mbox{]} ~\newline
+
+
+update\+: ~\newline
+ dF= A\+\_\+\mbox{[}l\mbox{]}$\ast$(1-\/\+A\+\_\+\mbox{[}l\mbox{]}) =A\+\_\+\mbox{[}l\mbox{]}-\/\+A\+\_\+\mbox{[}l\mbox{]}$\ast$\+A\+\_\+\mbox{[}l\mbox{]} ~\newline
+ dZ\mbox{[}l\mbox{]}=dF.$\ast$dZ\mbox{[}l\mbox{]} ~\newline
+
+
+output\+:dZ\mbox{[}l\mbox{]} ~\newline
+ 
+\begin{DoxyParams}{Parameters}
+{\em l} & layer index \\
+\hline
+{\em n\+\_\+sample} & No. of samples in the batch \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+dZ\mbox{[}l\mbox{]} updated 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classdnn_a9377e30990622d77b1ca09c1b1ab6f8a}\label{classdnn_a9377e30990622d77b1ca09c1b1ab6f8a}} 
 \index{dnn@{dnn}!train\+\_\+and\+\_\+dev@{train\+\_\+and\+\_\+dev}}
 \index{train\+\_\+and\+\_\+dev@{train\+\_\+and\+\_\+dev}!dnn@{dnn}}
 \subsubsection{\texorpdfstring{train\+\_\+and\+\_\+dev()}{train\_and\_dev()}}
-{\footnotesize\ttfamily void dnn\+::train\+\_\+and\+\_\+dev (\begin{DoxyParamCaption}\item[{const vector$<$ float $>$ \&}]{X\+\_\+train,  }\item[{const vector$<$ int $>$ \&}]{Y\+\_\+train,  }\item[{const vector$<$ float $>$ \&}]{X\+\_\+dev,  }\item[{const vector$<$ int $>$ \&}]{Y\+\_\+dev,  }\item[{const int \&}]{n\+\_\+train,  }\item[{const int \&}]{n\+\_\+dev,  }\item[{const int}]{num\+\_\+epochs = {\ttfamily 500},  }\item[{const float}]{learning\+\_\+rate = {\ttfamily 0.01},  }\item[{float}]{lambda = {\ttfamily 0},  }\item[{int}]{batch\+\_\+size = {\ttfamily 128},  }\item[{bool}]{print\+\_\+cost = {\ttfamily false} }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void dnn\+::train\+\_\+and\+\_\+dev (\begin{DoxyParamCaption}\item[{const vector$<$ float $>$ \&}]{X\+\_\+train,  }\item[{const vector$<$ int $>$ \&}]{Y\+\_\+train,  }\item[{const vector$<$ float $>$ \&}]{X\+\_\+dev,  }\item[{const vector$<$ int $>$ \&}]{Y\+\_\+dev,  }\item[{const int \&}]{n\+\_\+train,  }\item[{const int \&}]{n\+\_\+dev,  }\item[{const int}]{num\+\_\+epochs = {\ttfamily 500},  }\item[{float}]{learning\+\_\+rate = {\ttfamily 0.01},  }\item[{float}]{lambda = {\ttfamily 0},  }\item[{int}]{batch\+\_\+size = {\ttfamily 128},  }\item[{bool}]{print\+\_\+cost = {\ttfamily false} }\end{DoxyParamCaption})}
 
 Perform stochastic batch gradient training and evaluation using the validation(developing) data sets 
 \begin{DoxyParams}{Parameters}
@@ -148,6 +505,28 @@ Perform stochastic batch gradient training and evaluation using the validation(d
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
 weights and bias W,b updated in the object 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classdnn_a8cf7454d21ad0b081e7f2b18619ed2cd}\label{classdnn_a8cf7454d21ad0b081e7f2b18619ed2cd}} 
+\index{dnn@{dnn}!weights\+\_\+update@{weights\+\_\+update}}
+\index{weights\+\_\+update@{weights\+\_\+update}!dnn@{dnn}}
+\subsubsection{\texorpdfstring{weights\+\_\+update()}{weights\_update()}}
+{\footnotesize\ttfamily void dnn\+::weights\+\_\+update (\begin{DoxyParamCaption}\item[{const float \&}]{learning\+\_\+rate }\end{DoxyParamCaption})}
+
+update all the weights W and bias b ~\newline
+
+
+for each l from 1 to n\+\_\+layers-\/1 ~\newline
+ W\mbox{[}l\mbox{]}\+:=W\mbox{[}l\mbox{]}-\/learning\+\_\+rate$\ast$dW\mbox{[}l\mbox{]} ~\newline
+ b\mbox{[}l\mbox{]}\+:=b\mbox{[}l\mbox{]}-\/learning\+\_\+rate$\ast$db\mbox{[}l\mbox{]} ~\newline
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em learning\+\_\+rate} & learning rate \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+W,b updated 
 \end{DoxyReturn}
 
 
