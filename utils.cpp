@@ -41,9 +41,9 @@ void scale_features(vector<float> &X_train,vector<float> &X_dev,const int &n_tra
     }
     for(int i=0; i<n_features; i++) {
         for(int j=0; j<n_train; j++)
-            X_train[i+j*n_features]=(X_train[i+j*n_features]-mean[i])/var[i];
+            X_train[i+j*n_features]=(X_train[i+j*n_features]-mean[i])/(var[i]+1e-8);
         for(int j=0; j<n_dev; j++)
-            X_dev[i+j*n_features]=(X_dev[i+j*n_features]-mean[i])/var[i];
+            X_dev[i+j*n_features]=(X_dev[i+j*n_features]-mean[i])/(var[i]+1e-8);
     }
     var.clear();
     mean.clear();

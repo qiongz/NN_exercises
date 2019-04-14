@@ -68,10 +68,12 @@ public:
      * @param learning_rate learning rate of of gradients updating
      * @param lambda L2-regularization factor
      * @param batch_size  batch size in the stochastic batch gradient training
+     * @param optimizer if "gradient_descent", uses mini-batch gradient descent, if "Adam", use Adam optimizer
+     * @param batch_norm  if true, batch normalization is used
      * @param print_cost print the training/validation cost every 50 epochs if print_cost==true
      * @return weights and bias W,b updated in the object
      */
-    void train_and_dev(const vector<float>&X_train,const vector<int>&Y_train,const vector<float>&X_dev,const vector<int>&Y_dev,const int &n_train,const int &n_dev,const int num_epochs,float learning_rate,float lambda,int batch_size,bool print_cost);
+    void train_and_dev(const vector<float>&X_train,const vector<int>&Y_train,const vector<float>&X_dev,const vector<int>&Y_dev,const int &n_train,const int &n_dev,const int num_epochs,float learning_rate,float lambda,int batch_size,string optimizer,bool batch_norm,bool print_cost);
 
     /**
      * Perform prediction for the given unlabeled datasets
@@ -256,18 +258,42 @@ public:
     void multi_layers_forward(const int &n_sample,const bool &eval);
     /// multi layers backward propagate to get gradients
     void multi_layers_backward(const float *Y,const int &n_sample);
+
     /**
-     * update all the weights W and bias b <br/>
+     * update all the weights W and bias b with gradient descent <br/>
+     * decrease the learning to 1% of the initial learning rate after all the training sets consumed <br/>
+     * learning_rate=initial_learning_rate*(1-step/num_epochs)+0.01*initial_learning_rate <br/>
      *
      * for each l from 1 to n_layers-1 <br/>
      * W[l]:=W[l]-learning_rate*dW[l]  <br/>
      * b[l]:=b[l]-learning_rate*db[l]  <br/>
      *
      * @param learning_rate  learning rate
+     * @param num_epochs No. of epochs in the update
+     * @param step 
      * @return W,b updated
      */
-    void weights_update(const float &learning_rate);
+    void gradient_descent_optimize(const float &initial_learning_rate,const int & num_epochs, const int &step);
 
+    /**
+     * update all the weights W and bias b with Adam optimizer <br/>
+     * decrease the learning to 1% of the initial learning rate after all the training sets consumed <br/>
+     * learning_rate=initial_learning_rate*(1-step/num_epochs)+0.01*initial_learning_rate <br/>
+     *
+     * for each l from 1 to n_layers-1 <br/>
+     * W[l]:=W[l]-learning_rate*dW[l]  <br/>
+     * b[l]:=b[l]-learning_rate*db[l]  <br/>
+     *
+     * @param learning_rate  learning rate
+     * @param num_epochs No. of epochs in the update
+     * @param epoch_step epoch step
+     * @param train_step total train step 
+     * @return W,b updated
+     */
+    void Adam_optimize(const float &initial_learning_rate,const float &beta_1,const float &beta_2,const int &num_epochs,const int &epoch_step,const int &train_step);
+
+    /// Initialize weights,bias and their gradients for batch normalization
+    void initialize_batch_norm_weights();
     /// allocate memory space for layer caches A,dZ
     void initialize_layer_caches(const int &n_sample,const bool &is_bp);
     /// clear layer caches A,dZ
@@ -276,6 +302,8 @@ public:
     void initialize_dropout_masks();
     /// clear DropM
     void clear_dropout_masks();
+    /// Initialize momentum and rms in Adam optimizer
+    void initialize_momentum_rms();
 
     /**
      * Initialize dropout masks DropM  <br/>
@@ -306,6 +334,9 @@ private:
     vector<float*> W,b;    /// weights and bias 
     vector<float*> dW,db;  /// gradients 
     vector<float*> A,dZ,DropM;   /// activation values for each layer A, gradients dZ, and dropout masks  dropM
+    vector<float*> VdW,Vdb,SdW,Sdb; /// momentum and rms for dW,db used for Adam optimization
+    vector<float*> VdW_corrected,Vdb_corrected,SdW_corrected,Sdb_corrected; // bias corrected momentum and rms for Adam optimization
+    vector<float*> B,dB,G,dG;  // weights and bias used in batch normalization
     vector<int> layer_dims;   /// layer dimensions
     vector<float> keep_probs; /// keep probabities for hidden layers
     vector<string> activation_types; /// activation type for hidden layers

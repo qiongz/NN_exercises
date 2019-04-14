@@ -17,9 +17,13 @@ int main(int argc,char *argv[]) {
     onehot(Y_train_orig,Y_train,n_classes);
     onehot(Y_dev_orig,Y_dev,n_classes);
 
-    // multi-classes logistic regression 
-    dnn clr(n_features,n_classes);
-    clr.train_and_dev(X_train,Y_train,X_dev,Y_dev,n_train,n_dev,num_epochs,learning_rate,Lambda,batch_size,true);
+    // multi-classes logistic regression with dropout 
+    int n_h=0;
+    vector<int> hidden_dim;
+    vector<float> keep_probs{0.8};
+    vector<string> act_types;
+    dnn clr(n_features,n_classes,n_h,hidden_dim,act_types,keep_probs);
+    clr.train_and_dev(X_train,Y_train,X_dev,Y_dev,n_train,n_dev,num_epochs,learning_rate,Lambda,batch_size,"Adam",false,true);
     accuracy=clr.predict_accuracy(X_dev,Y_dev_orig,Y_prediction,n_dev);
     cout<<"validation set accuracy:"<<accuracy<<endl;
    
