@@ -1,5 +1,6 @@
 #include"init.h"
 #include"utils.h"
+#include"layers.h"
 #include"dnn.h"
 
 int main(int argc,char *argv[]) {
@@ -18,11 +19,10 @@ int main(int argc,char *argv[]) {
     onehot(Y_dev_orig,Y_dev,n_classes);
 
     // multi-classes logistic regression with dropout 
-    int n_h=0;
-    vector<int> hidden_dim;
-    vector<float> keep_probs{0.8};
-    vector<string> act_types;
-    dnn clr(n_features,n_classes,n_h,hidden_dim,act_types,keep_probs);
+    layers input_layer(n_features,0.8,true,"Input","None");
+    layers output_layer(n_classes,1,false,"Output","softmax"); 
+
+    dnn clr(n_features,n_classes,&input_layer,&output_layer);
     clr.train_and_dev(X_train,Y_train,X_dev,Y_dev,n_train,n_dev,num_epochs,learning_rate,Lambda,batch_size,"Adam",false,true);
     accuracy=clr.predict_accuracy(X_dev,Y_dev_orig,Y_prediction,n_dev);
     cout<<"validation set accuracy:"<<accuracy<<endl;
