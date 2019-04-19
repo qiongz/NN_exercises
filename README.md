@@ -80,7 +80,7 @@ Cost of train/validation at epoch    9 :  0.00862098 0.03288486
 Cost of train/validation at epoch   10 :  0.00722232 0.03297896 
 validation set accuracy:0.992024
 </code></pre>
-The accuracy improves, while we could that it's still overfitted, batch-normalization will be updated in the further version.
+The accuracy improves, while we could see that we're still over-fitting, batch-normalization will be updated in the further version.
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
