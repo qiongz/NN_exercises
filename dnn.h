@@ -1,60 +1,49 @@
-/** 
- * deep neural networks exercises
+/**
+ * deep neural networks exercises with C++
  * logistic regression,
  * feed forward neural network,
- * convolutional neural networks (to be updated),... 
+ * convolutional neural network,
+ * recurrent neural network (to be updated)
  * @author qiong zhu
- * @version 0.1 13/04/2019
+ * @version 0.2 18/04/2019
  */
 
 #ifndef DNN_H
 #define DNN_H
-#include<cstdlib>
-#include<cmath>
-#include<cstdio>
-#include<vector>
-#include<iostream>
-#include<cstring>
-#include<string>
-#include<ctime>
-#include<random>
-#include"mkl.h"
-#define METHOD_INT VSL_RNG_METHOD_UNIFORMBITS_STD
-#define METHOD_FLOAT VSL_RNG_METHOD_UNIFORM_STD
+#include"layers.h"
 
-using namespace std;
-class dnn{
+class dnn {
 public:
-    /** 
-     * constructor without hidden layers, perform logistic regression
+    /**
+     * constructor with input and output layers
      * @param n_f  No. of features in X
      * @param n_c  No. of classes in Y
+     * @param head input layer
+     * @param tail output layer
      */
-    dnn(int n_f,int n_c);
+    dnn(int n_f,int n_c,layers *head,layers *tail);
 
-    /**
-     * constructor with hidden layer dimensions and activation types specified
-     * @param n_f No. of features in X
-     * @param n_c No. of classes in Y
-     * @param n_h No. of hidden layers 
-     * @param dims integer vector containing hidden layer dimension
-     * @param act_types string vector containing activation types for the hidden layers
-     */
-    dnn(int n_f,int n_c,int n_h,const vector<int>& dims,const vector<string>& act_types);
-
-    /**
-     * constructor with hidden layer dimensions, activation types and dropout keep_probs specified
-     * @param n_f No. of features in X
-     * @param n_c No. of classes in Y
-     * @param n_h No. of hidden layers 
-     * @param dims integer vector containing hidden layer dimension
-     * @param act_types string vector containing activation types for the hidden layers
-     * @param k_ps keep probabilities for dropout in the hidden layers
-     */
-    dnn(int n_f,int n_c,int n_h,const vector<int>& dims,const vector<string>& act_types,const vector<float>& k_ps);
-
-    /// destructor, clean the memory space 
+    /// destructor, clean the memory space
     ~dnn();
+
+    /** 
+     * insert hidden layer after the input layer
+     * @param new_layer  the new layer to be inserted
+     */
+    void insert_after_input(layers * new_layer);
+    /// insert hidden layer before the output layer
+    void insert_before_output(layers * new_layer);
+
+    /// initialize all layer variables
+    void initialize_layers(const int &n_sample,const float &_lambda,const string &optimizer,const bool &batch_norm);
+    /// initialize layer caches
+    void initialize_layers_caches(const int &n_sample,const bool &is_bp);
+    /// clar layer caches
+    void clear_layers_caches(const bool &is_bp);
+    /// return argmax of given vector in a range
+    int get_argmax(const float *x,const int &range);
+    /// print parameters of all layers
+    void print_layers();
 
     /**
      * Perform stochastic batch gradient training and evaluation using the validation(developing) data sets
@@ -70,10 +59,11 @@ public:
      * @param batch_size  batch size in the stochastic batch gradient training
      * @param optimizer if "gradient_descent", uses mini-batch gradient descent, if "Adam", use Adam optimizer
      * @param batch_norm  if true, batch normalization is used
-     * @param print_cost print the training/validation cost every 50 epochs if print_cost==true
+     * @param print_cost print the training/validation cost every print_period epochs if print_cost==true
+     * @param print_period print results every period epochs
      * @return weights and bias W,b updated in the object
      */
-    void train_and_dev(const vector<float>&X_train,const vector<int>&Y_train,const vector<float>&X_dev,const vector<int>&Y_dev,const int &n_train,const int &n_dev,const int num_epochs,float learning_rate,float lambda,int batch_size,string optimizer,bool batch_norm,bool print_cost);
+    void train_and_dev(const vector<float>&X_train,const vector<int>&Y_train,const vector<float>&X_dev,const vector<int>&Y_dev,const int &n_train,const int &n_dev,const int num_epochs,float learning_rate,float lambda,int batch_size,string optimizer,bool batch_norm,bool print_cost,int print_period);
 
     /**
      * Perform prediction for the given unlabeled datasets
@@ -95,13 +85,6 @@ public:
     float predict_accuracy(const vector<float>& _X,const vector<int> &Y,vector<int> &Y_prediction,const int &n_sample);
 
     /**
-     * Allocate memory space for W,dW,b,db, <br/>
-     * initialize weights W with random     <br/>
-     * normal distributions and b with zeros <br/>
-     */
-    void initialize_weights();
-
-    /**
      * Shuffle the datasets
      * @param X data X
      * @param Y data Y
@@ -110,7 +93,7 @@ public:
     */
     void shuffle(float *X,float *Y,int n_sample);
 
-    /** 
+    /**
      * Obtain a batch datasets from the full datasets (used for training/developing)
      * @param X pointer to data X
      * @param Y pointer to data Y
@@ -119,7 +102,7 @@ public:
      * @param batch_size  batch size
      * @param batch_id  No. of batches extracted, used as an offset
      * @return batched dataset stored in X_batch,Y_batch
-     */  
+     */
     void batch(const float *X,const float *Y,float *X_batch,float *Y_batch,int batch_size, int batch_id);
 
     /**
@@ -133,191 +116,27 @@ public:
     void batch(const float *X,float *X_batch,int batch_size, int batch_id);
 
     /**
-     * Get the maximum value and index from the array
-     * @param x pointer to the array
-     * @param range range of array
-     * @param index_max reference pointer to argmax of the array
-     * @return the maximum value,argmax of the array store in index_max
+     * feed the batch training data transposed 
+     * @param X batched data
+     * @param XT transposed feeded data
+     * @param batch_size No. of samples
+     * @param feature/classes dimension
      */
-    float max(const float *x,int range,int &index_max);
+    void feed_transposed(const float *X, float *XT, int batch_size,int N);
 
-    /**
-     * Perform sigmoid activation for the given layer <br/>
-     * input: Z[l] (stored in A[l])   <br/>
-     *
-     * update:                        <br/>
-     * A[l]=1/(1+exp(-Z[l])           <br/>
-     *
-     * output: A[l]                   <br/>
-     * @param l layer index
-     * @param n_sample No. of samples in the datasets
-     * @return A[l] stored with activated neurons
-     */
-    void sigmoid_activate(const int &l,const int &n_sample);
-
-    /**
-     * Perform ReLU activation for the given layer    <br/>
-     * input: Z[l] (stored in A[l])   <br/>
-     *
-     * update:                        <br/>
-     * A[l]=  Z[l], if Z[l]>0         <br/>
-     *        0   ,  otherwise        <br/>
-     *
-     * output: A[l]                   <br/>
-     * @param l layer index           
-     * @param n_sample No. of samples in the datasets
-     * @return A[l] stored with activated neurons
-     */
-    void ReLU_activate(const int &l,const int &n_sample);
-
-   
-    /** 
-     * Perform sigmoid backward gradients calculation <br/>
-     * input: A[l]                                    <br/>
-     * 
-     * update:                                        <br/>
-     *    dF= A_[l]*(1-A_[l]) =A_[l]-A_[l]*A_[l]      <br/>
-     *    dZ[l]=dF.*dZ[l]                             <br/>
-     *
-     * output:dZ[l]                                   <br/>
-     * @param l  layer index
-     * @param n_sample No. of samples in the batch
-     * @return dZ[l] updated
-     */
-    void sigmoid_backward_activate(const int &l,const int &n_sample);
-
-    /** 
-     * Perform ReLU backward gradients calculation  <br/>
-     * input: A[l]                                  <br/>
-     * 
-     * update:                                      <br/>
-     *    dF= 1, if A[l]>0                          <br/>
-     *       0, otherwise                           <br/>
-     *    dZ[l]=dF.*dZ[l]                           <br/>
-     *
-     * output:dZ[l]                                 <br/>
-     * @param l  layer index
-     * @param n_sample No. of samples in the batch
-     * @return dZ[l] updated
-     */
-    void ReLU_backward_activate(const int &l,const int &n_sample);
-
-    /**
-     * Calculate the softmax of the given(by default the final) layer <br/>
-     * l=n_layers-1                                                   <br/>
-     * input: Z[l] (stored in A[l])                                   <br/>
-     *
-     * update:                                                        <br/>
-     * A[l][i]= exp(Z[l][i])/\sum_i(exp(Z[l][i]))                     <br/>
-     *
-     * output: A[l]                                                   <br/>
-     * @param n_sample No. of samples in the datasets
-     * @return A[l] stored with the softmax neurons
-     */
-    void get_softmax(const int &n_sample);
-
-    /** 
-     * Forward propagate and activation for each layer    <br/>
-     * input: A[l-1],W[l],b[l],DropM[l-1]                 <br/>
-     *
-     * update:                                            <br/>
-     * if dropout==true:
-     *    A[l-1]=A[l-1].*DropM[l-1]                       <br/>
-     * A[l]=activation_function(W[l].T*A[l-1]+b[l])       <br/>
-     *
-     * output: A[l]                                       <br/>
-     * @param l layer index
-     * @param n_sample No. of samples in the datasets
-     * @param eval if eval==true, dropout is not used
-     * @return A[l] updated
-     */
-    void forward_activated_propagate(const int &l ,const int &n_sample,const bool &eval);
-
-    /**
-     * backward propagate for each layer <br/>
-     * if J is the total mean cost, denote all  <br/>
-     * \f$\partial{J}/\partial{A}\to dA\f$, \f$\partial{J}/\partial{Z}\to dZ\f$,  <br/>
-     * \f$\partial{J}/\partial{W}\to dW\f$, \f$\partial{J}/\partial{b}\to db\f$, <br/>
-     * \f$\partial{A}/\partial{Z}\to dF\f$  <br/>
-     * and denote layer_dims[l]->n_[l], * for dot product, .* for element-wise product <br/>
-     * input: dZ[l],A[l-1],W[l]                                                 <br/>
-     * 
-     * update:                                                                  <br/>
-     * db[l](n[l])=sum(dZ[l](n_sample,n[l]),axis=0)                             <br/>
-     * dW[l](n[l],n[l-1])=dZ[l](n_sample,n[l]).T*A[l-1](n_sample,n[l-1])        <br/>
-     * dF=activation_backward(A[l-1](n_sample,n[l-1])                           <br/>
-     * dZ[l-1](n_sample,n[l])=(dZ[l](n_sample,n[l])*W[l](n[l],n[l-1])).*dF(n_sample,n[l-1])   <br/>
-     *
-     * output: dZ[l-1],dW[l],db[l]                                              <br/>
-     * @param l layer index
-     * @param n_sample No. of samples in the datasets
-     * @return dZ[l-1],dW[l],db[l] updated
-     */
-    void backward_propagate(const int &l,const int &n_sample);
     /// multi layers forward propagate and activation
-    void multi_layers_forward(const int &n_sample,const bool &eval);
+    void multi_layers_forward(const bool &eval);
     /// multi layers backward propagate to get gradients
     void multi_layers_backward(const float *Y,const int &n_sample);
 
-    /**
-     * update all the weights W and bias b with gradient descent <br/>
-     * decrease the learning to 1% of the initial learning rate after all the training sets consumed <br/>
-     * learning_rate=initial_learning_rate*(1-step/num_epochs)+0.01*initial_learning_rate <br/>
-     *
-     * for each l from 1 to n_layers-1 <br/>
-     * W[l]:=W[l]-learning_rate*dW[l]  <br/>
-     * b[l]:=b[l]-learning_rate*db[l]  <br/>
-     *
-     * @param learning_rate  learning rate
-     * @param num_epochs No. of epochs in the update
-     * @param step 
-     * @return W,b updated
-     */
     void gradient_descent_optimize(const float &initial_learning_rate,const int & num_epochs, const int &step);
-
-    /**
-     * update all the weights W and bias b with Adam optimizer <br/>
-     * decrease the learning to 1% of the initial learning rate after all the training sets consumed <br/>
-     * learning_rate=initial_learning_rate*(1-step/num_epochs)+0.01*initial_learning_rate <br/>
-     *
-     * for each l from 1 to n_layers-1 <br/>
-     * W[l]:=W[l]-learning_rate*dW[l]  <br/>
-     * b[l]:=b[l]-learning_rate*db[l]  <br/>
-     *
-     * @param learning_rate  learning rate
-     * @param num_epochs No. of epochs in the update
-     * @param epoch_step epoch step
-     * @param train_step total train step 
-     * @return W,b updated
-     */
     void Adam_optimize(const float &initial_learning_rate,const float &beta_1,const float &beta_2,const int &num_epochs,const int &epoch_step,const int &train_step);
-
-    /// Initialize weights,bias and their gradients for batch normalization
-    void initialize_batch_norm_weights();
-    /// allocate memory space for layer caches A,dZ
-    void initialize_layer_caches(const int &n_sample,const bool &is_bp);
-    /// clear layer caches A,dZ
-    void clear_layer_caches();
-    /// allocate memory space for dropout masks DropM
-    void initialize_dropout_masks();
-    /// clear DropM
-    void clear_dropout_masks();
-    /// Initialize momentum and rms in Adam optimizer
-    void initialize_momentum_rms();
-
-    /**
-     * Initialize dropout masks DropM  <br/>
-     * if No. of hidden layers >0 and dropout==true <br/>
-     * assign 1/0 according to keep probabilities keep_probs <br/>
-     */
-    void set_dropout_masks();
-
     /**
      * Calculate the mean cost using the cross-entropy loss  <br/>
-     * input: A[n_layers-1], Y   <br/>
+     * input: output->A, Y   <br/>
      *
      * update:                   <br/>
-     * J=-Y.*log(A[n_layers-1])  <br/>
+     * J=-Y.*log(output->A)  <br/>
      * cost=sum(J)/n_sample      <br/>
      *
      * output:
@@ -328,19 +147,10 @@ public:
     float cost_function(const float *Y,const int &n_sample);
 
 private:
-    int n_features,n_classes,n_layers;  // No. of features, classes and layers
+    layers *input,*output;  /// layers pointer to the input and output layers
+    int n_features,n_classes,n_layers;  /// No. of features, classes and layers
+    VSLStreamStatePtr rndStream;  /// pointer to the mkl rng
+    unsigned mkl_seed;       /// mkl rng seed
     float Lambda;          /// L2-regularization factor
-    bool dropout=false;    /// if dropout is used
-    vector<float*> W,b;    /// weights and bias 
-    vector<float*> dW,db;  /// gradients 
-    vector<float*> A,dZ,DropM;   /// activation values for each layer A, gradients dZ, and dropout masks  dropM
-    vector<float*> VdW,Vdb,SdW,Sdb; /// momentum and rms for dW,db used for Adam optimization
-    vector<float*> VdW_corrected,Vdb_corrected,SdW_corrected,Sdb_corrected; // bias corrected momentum and rms for Adam optimization
-    vector<float*> B,dB,G,dG;  // weights and bias used in batch normalization
-    vector<int> layer_dims;   /// layer dimensions
-    vector<float> keep_probs; /// keep probabities for hidden layers
-    vector<string> activation_types; /// activation type for hidden layers
-    unsigned weights_seed,mkl_seed;  // seed for generating weights and mkl rng
-    long mkl_rnd_skipped=0;   // No. of consumed rnds in mkl rng
 };
 #endif
