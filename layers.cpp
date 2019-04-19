@@ -117,7 +117,7 @@ void layers::print_parameters() {
     cout<<"    filter: ( "<<filter_size<<" x "<<filter_size<<" )"<<endl;
     cout<<"     dim_W: ( "<<n_channel<<" x "<<prev->n_channel<<" x "<<filter_size<<" x "<<filter_size<<" )"<<endl;
     cout<<" n_channel: "<<n_channel<<endl;
-    cout<<"  paddling: "<<paddling<<endl;
+    cout<<"  padding: "<<padding<<endl;
     cout<<"    stride: "<<stride<<endl;
     cout<<"activation: "<<activation<<endl;
     if(dropout==true)
@@ -143,7 +143,7 @@ void layers::initialize(const int &_n,const float &_lambda, const string &_optim
   batch_norm=_batch_norm;
   if(!is_init) {
     if(layer_type=="Conv2d") {
-      L=(prev->L-filter_size+2*paddling)/stride+1;
+      L=(prev->L-filter_size+2*padding)/stride+1;
       area=L*L;
       dim=area*n_channel;
       dim_W=n_channel*filter_size*filter_size*prev->n_channel;
@@ -156,7 +156,7 @@ void layers::initialize(const int &_n,const float &_lambda, const string &_optim
         init_dropout_mask();
     }
     if(layer_type=="Pool") {
-      paddling=0;
+      padding=0;
       L=(prev->L-filter_size)/stride+1;
       area=L*L;
       filter_area=filter_size*filter_size;
@@ -290,7 +290,7 @@ void layers::forward_activated_propagate(const bool &eval) {
   }
 
   /// Z(n_sample,n_channel,L,L)=W(n_channel,filter_size,filter_size,prev->n_channel)*prev->A(n_sample,prev->n_channel,prev->L,prev->L)
-  /// L=(prev->L+2*paddling-filter_size)/stride+1, sum over (filter_size/stride, filter_size/stride,prev->n_channel)
+  /// L=(prev->L+2*padding-filter_size)/stride+1, sum over (filter_size/stride, filter_size/stride,prev->n_channel)
   if(layer_type=="Conv2d") {
     long index_A,index_W,index_prev_A;
     memset(A,0,sizeof(float)*n_sample*dim);
@@ -301,14 +301,14 @@ void layers::forward_activated_propagate(const bool &eval) {
             for(int l=0; l<prev->n_channel; l++)
               for(int fl=0; fl<filter_size; fl++) {
                 // calcuate index outside of the innermost loop
-                int il=fl+i*stride-paddling;
+                int il=fl+i*stride-padding;
                 if(il>=0 &&il<prev->L) {
                   index_W=n*prev->n_channel*filter_area+l*filter_area+fl*filter_size;
-                  index_prev_A=(l*prev->area+il*prev->L+j*stride-paddling)*n_sample;
-                  // convolution prod with paddling
-                  if(j*stride-paddling<0 || j*stride-paddling+filter_size>=prev->L)
+                  index_prev_A=(l*prev->area+il*prev->L+j*stride-padding)*n_sample;
+                  // convolution prod with padding
+                  if(j*stride-padding<0 || j*stride-padding+filter_size>=prev->L)
                     for(int fw=0; fw<filter_size; fw++) {
-                      int iw=fw+j*stride-paddling;
+                      int iw=fw+j*stride-padding;
                       if(iw>=0 && iw<prev->L)
 			 /* for-loop version */
 			// for(int m=0;m<n_sample;m++)
@@ -406,14 +406,14 @@ void layers::backward_propagate() {
             dW[index_dW]=0;
             //for(int m=0; m<n_sample; m++)
               for(int i=0; i<L; i++) {
-                int il=i*stride+fl-paddling;
+                int il=i*stride+fl-padding;
                 if(il>=0 && il<prev->L) {
                   index_dZ=(n*area+i*L)*n_sample;
-                  index_prev_A=(l*prev->area+il*prev->L+fw-paddling)*n_sample;
-                  // if convolution on the paddling of prev->A
-                  if(fw-paddling<0 || fw-paddling+(L-1)*stride+1>=prev->L)
+                  index_prev_A=(l*prev->area+il*prev->L+fw-padding)*n_sample;
+                  // if convolution on the padding of prev->A
+                  if(fw-padding<0 || fw-padding+(L-1)*stride+1>=prev->L)
                     for(int j=0; j<L; j++) {
-                      int iw=j*stride+fw-paddling;
+                      int iw=j*stride+fw-padding;
                       if(iw>=0 && iw<prev->L)
 		       // vectorized version with n_sample as lda
 		        dW[index_dW]+=cblas_sdot(n_sample,dZ+index_dZ+j*n_sample,1,prev->A+index_prev_A+j*stride*n_sample,1);
@@ -451,12 +451,12 @@ void layers::backward_propagate() {
               index_dA=(l*prev->area+il*prev->L+iw)*n_sample;
               for(int n=0; n<n_channel; n++)
                 for(int fl=0; fl<filter_size; fl++) {
-                  int i=(il+paddling-fl)/stride;
+                  int i=(il+padding-fl)/stride;
                   if(i>=0 && i<L) {
                     index_W=n*prev->n_channel*filter_area+l*filter_area+fl*filter_size;
                     index_dZ=(n*area+i*L)*n_sample;
                     for(int fw=0; fw<filter_size; fw++) {
-                      int j=(iw+paddling-fw)/stride;
+                      int j=(iw+padding-fw)/stride;
                       if(j>=0 &&j<L)
                       //for(int m=0; m<n_sample; m++)
                        // prev->dA[index_dA+m]+=W[index_W+fw]*dZ[index_dZ+j*n_sample+m];

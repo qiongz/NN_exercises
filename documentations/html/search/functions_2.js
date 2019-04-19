@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['dnn',['dnn',['../classdnn.html#ab6d436cbc35d10258bd8d3e314cb36b8',1,'dnn::dnn(int n_f, int n_c)'],['../classdnn.html#aae6e714fc63cc1b73b40510e5a3401c7',1,'dnn::dnn(int n_f, int n_c, int n_h, const vector&lt; int &gt; &amp;dims, const vector&lt; string &gt; &amp;act_types)'],['../classdnn.html#a657974689367069e38e600c594a461f0',1,'dnn::dnn(int n_f, int n_c, int n_h, const vector&lt; int &gt; &amp;dims, const vector&lt; string &gt; &amp;act_types, const vector&lt; float &gt; &amp;k_ps)']]]
+  ['clear_5fcaches',['clear_caches',['../classlayers.html#aa54834f30f3a0a0e080f14eee8671e66',1,'layers']]],
+  ['clear_5flayers_5fcaches',['clear_layers_caches',['../classdnn.html#ad47aa3fc19b10ce1be32d844074fcfda',1,'dnn']]],
+  ['cost_5ffunction',['cost_function',['../classdnn.html#a90021be0d55ab9b68b283d39eac19818',1,'dnn']]]
 ];

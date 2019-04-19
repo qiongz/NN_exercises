@@ -57,11 +57,11 @@ public:
      * @param dropout if dropout is used
      * @param _layer_type layer type
      * @param _act activation type
-     * @param _paddle paddling
+     * @param _paddle padding
      * @param _f filter_size
      * @param _s stride
      */
-    layers(int n,float _keep_prob=1,bool _dropout=false,string _layer_type="Conv2d",string _act="None",int _paddle=2,int f=3,int s=1 ):n_channel(n),keep_prob(_keep_prob),dropout(_dropout),layer_type(_layer_type),activation(_act),paddling(_paddle),filter_size(f),stride(s) {
+    layers(int n,float _keep_prob=1,bool _dropout=false,string _layer_type="Conv2d",string _act="None",int _paddle=2,int f=3,int s=1 ):n_channel(n),keep_prob(_keep_prob),dropout(_dropout),layer_type(_layer_type),activation(_act),padding(_paddle),filter_size(f),stride(s) {
 	    filter_area=filter_size*filter_size;
 	    optimizer="sgd";
 	    batch_norm=false;
@@ -179,7 +179,7 @@ public:
     layers *prev,*next;   /// pointer to the previous and next layer
     int L,area,n_channel,dim,n_sample;      /// L, area=L*L, dim=area*n_channel, 
     int dim_W,dim_b;   /// size of W,dW,VdW,SdW, and b,db,Vdb,Sdb
-    int paddling,stride,filter_size,filter_area;   /// parameter for conv nets
+    int padding,stride,filter_size,filter_area;   /// parameter for conv nets
     string layer_type,activation,optimizer;   /// layer,activation and optimization types
     VSLStreamStatePtr rndStream;      /// pointer to the mkl random number generator
     unsigned weights_seed,mkl_seed;  /// seed for generate weights and dropout masks

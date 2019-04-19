@@ -54,11 +54,11 @@ The accuracy is much better than the logistic regression
 
 The test initialize the convolutional network with three convolutional and pooling layers <br/>
 Input layer: dropout keep_prob=0.9,<br/>
-1st Conv2d layer: {filter_size=3, paddling=1, stride=1, n_channel=16} <br/>
+1st Conv2d layer: {filter_size=3, padding=1, stride=1, n_channel=16} <br/>
 1st Pool layer: {filter_size=2,stride=2,n_channel=16}  <br/>
-2nd Conv2d layer: {filter_size=3, paddling=1, stride=1, n_channel=32} <br/>
+2nd Conv2d layer: {filter_size=3, padding=1, stride=1, n_channel=32} <br/>
 2nd Pool layer: {filter_size=2,stride=2,n_channel=32} <br/>
-3rd Conv2d layer: {filter_size=3, paddling=1, stride=1, n_channel=64} <br/>
+3rd Conv2d layer: {filter_size=3, padding=1, stride=1, n_channel=64} <br/>
 3rd Pool layer: {filter_size=2,stride=2,n_channel=64} <br/>
 1st Hidden layer: dim=512, dropout keep_prob=0.5 <br/>
 2nd Hidden layer: dim=256, dropout keep_prob=0.6 <br/>

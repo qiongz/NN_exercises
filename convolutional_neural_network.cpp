@@ -18,15 +18,15 @@ int main(int argc,char *argv[]) {
     onehot(Y_train_orig,Y_train,n_classes);
     onehot(Y_dev_orig,Y_dev,n_classes);
 
-    layers input_layer(n_features,28,0.9,true,"Input","None"); /// L=28,                 dim:= 28 x 28 x 1 x _n
-    layers conv_layer_1(16,1,false,"Conv2d","ReLU",1,3,1);      /// L=(28+2*1-3)/1+1=28  dim:= 28 x 28 x 16 x _n
+    layers input_layer(n_features,28,1.0,false,"Input","None"); /// L=28,                 dim:= 28 x 28 x 1 x _n
+    layers conv_layer_1(16,1,false,"Conv2d","ReLU",2,5,1);      /// L=(28+2*2-5)/1+1=28  dim:= 28 x 28 x 16 x _n
     layers pool_layer_1(16,1,false,"Pool","None",0,2,2);      /// L=(28-2)/2+1=14,       dim:= 14 x 14 x 16 x _n
-    layers conv_layer_2(32,1,false,"Conv2d","ReLU",1,3,1);      /// L=(14+2*1-3)/1+1=14, dim:= 14 x 14 x 32 x _n
+    layers conv_layer_2(32,1,false,"Conv2d","ReLU",2,5,1);      /// L=(14+2*2-5)/1+1=14, dim:= 14 x 14 x 32 x _n
     layers pool_layer_2(32,1,false,"Pool","None",0,2,2);      /// L=(14-2)/2=6,          dim:= 6 x 6 x 32 x _n
-    layers conv_layer_3(64,1,false,"Conv2d","ReLU",1,3,1);      /// L=(6+2*1-3)/1+1=6,   dim:= 6 x 6 x 64 x _n
-    layers pool_layer_3(64,1,false,"Pool","None",0,2,2);      /// L=(6-2)/2=2,           dim:= 2 x 2 x 64 x _n
-    layers fully_connected_layer_1(512,1,0.5,true,"Hidden","ReLU"); ///                  dim:= 512 x _n
-    layers fully_connected_layer_2(256,1,0.6,true,"Hidden","ReLU"); ///                  dim:= 256 x _n
+    layers conv_layer_3(64,1,false,"Conv2d","ReLU",2,5,1);      /// L=(6+2*2-5)/1+1=6,  dim:= 6 x 6 x 64 x _n
+    layers pool_layer_3(64,1,false,"Pool","None",0,2,2);      /// L=(6-2)/2=2,          dim:= 2 x 2 x 64 x _n
+    layers fully_connected_layer_1(768,1,0.5,true,"Hidden","ReLU"); ///                  dim:= 768 x _n
+    layers fully_connected_layer_2(256,1,0.5,true,"Hidden","ReLU"); ///                  dim:= 256 x _n
     layers output_layer(n_classes,1,1,false,"Output","softmax");   ///                   dim:= 10 x _n
 
     dnn clr(n_features,n_classes,&input_layer,&output_layer);
