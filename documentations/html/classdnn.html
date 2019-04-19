@@ -65,118 +65,80 @@ $(function() {
 <div class="title">dnn Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="dnn_8h_source.html">dnn.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ab6d436cbc35d10258bd8d3e314cb36b8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#ab6d436cbc35d10258bd8d3e314cb36b8">dnn</a> (int n_f, int n_c)</td></tr>
-<tr class="separator:ab6d436cbc35d10258bd8d3e314cb36b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aae6e714fc63cc1b73b40510e5a3401c7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#aae6e714fc63cc1b73b40510e5a3401c7">dnn</a> (int n_f, int n_c, int n_h, const vector&lt; int &gt; &amp;dims, const vector&lt; string &gt; &amp;act_types)</td></tr>
-<tr class="separator:aae6e714fc63cc1b73b40510e5a3401c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a657974689367069e38e600c594a461f0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#a657974689367069e38e600c594a461f0">dnn</a> (int n_f, int n_c, int n_h, const vector&lt; int &gt; &amp;dims, const vector&lt; string &gt; &amp;act_types, const vector&lt; float &gt; &amp;k_ps)</td></tr>
-<tr class="separator:a657974689367069e38e600c594a461f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70a21783e965e89e1df0f26db895ce2c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#a70a21783e965e89e1df0f26db895ce2c">dnn</a> (int n_f, int n_c, <a class="el" href="classlayers.html">layers</a> *head, <a class="el" href="classlayers.html">layers</a> *tail)</td></tr>
+<tr class="separator:a70a21783e965e89e1df0f26db895ce2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3384dfd89ac2e10f6554e05a53b288ad"><td class="memItemLeft" align="right" valign="top"><a id="a3384dfd89ac2e10f6554e05a53b288ad"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#a3384dfd89ac2e10f6554e05a53b288ad">~dnn</a> ()</td></tr>
 <tr class="memdesc:a3384dfd89ac2e10f6554e05a53b288ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">destructor, clean the memory space <br /></td></tr>
 <tr class="separator:a3384dfd89ac2e10f6554e05a53b288ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9377e30990622d77b1ca09c1b1ab6f8a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#a9377e30990622d77b1ca09c1b1ab6f8a">train_and_dev</a> (const vector&lt; float &gt; &amp;X_train, const vector&lt; int &gt; &amp;Y_train, const vector&lt; float &gt; &amp;X_dev, const vector&lt; int &gt; &amp;Y_dev, const int &amp;n_train, const int &amp;n_dev, const int num_epochs, float learning_rate, float lambda, int batch_size, bool print_cost)</td></tr>
-<tr class="separator:a9377e30990622d77b1ca09c1b1ab6f8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d2b06debb98d46177e8b93d9bd6ad21"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#a3d2b06debb98d46177e8b93d9bd6ad21">insert_after_input</a> (<a class="el" href="classlayers.html">layers</a> *new_layer)</td></tr>
+<tr class="separator:a3d2b06debb98d46177e8b93d9bd6ad21"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a327b1204769df2a14d34ea9246521fdc"><td class="memItemLeft" align="right" valign="top"><a id="a327b1204769df2a14d34ea9246521fdc"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#a327b1204769df2a14d34ea9246521fdc">insert_before_output</a> (<a class="el" href="classlayers.html">layers</a> *new_layer)</td></tr>
+<tr class="memdesc:a327b1204769df2a14d34ea9246521fdc"><td class="mdescLeft">&#160;</td><td class="mdescRight">insert hidden layer before the output layer <br /></td></tr>
+<tr class="separator:a327b1204769df2a14d34ea9246521fdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29b5f3e9eb0cbfcbc02972bcbc740273"><td class="memItemLeft" align="right" valign="top"><a id="a29b5f3e9eb0cbfcbc02972bcbc740273"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#a29b5f3e9eb0cbfcbc02972bcbc740273">initialize_layers</a> (const int &amp;n_sample, const float &amp;_lambda, const string &amp;optimizer, const bool &amp;batch_norm)</td></tr>
+<tr class="memdesc:a29b5f3e9eb0cbfcbc02972bcbc740273"><td class="mdescLeft">&#160;</td><td class="mdescRight">initialize all layer variables <br /></td></tr>
+<tr class="separator:a29b5f3e9eb0cbfcbc02972bcbc740273"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e08e8e146b329e8bb5de48944aa6781"><td class="memItemLeft" align="right" valign="top"><a id="a5e08e8e146b329e8bb5de48944aa6781"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#a5e08e8e146b329e8bb5de48944aa6781">initialize_layers_caches</a> (const int &amp;n_sample, const bool &amp;is_bp)</td></tr>
+<tr class="memdesc:a5e08e8e146b329e8bb5de48944aa6781"><td class="mdescLeft">&#160;</td><td class="mdescRight">initialize layer caches <br /></td></tr>
+<tr class="separator:a5e08e8e146b329e8bb5de48944aa6781"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad47aa3fc19b10ce1be32d844074fcfda"><td class="memItemLeft" align="right" valign="top"><a id="ad47aa3fc19b10ce1be32d844074fcfda"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#ad47aa3fc19b10ce1be32d844074fcfda">clear_layers_caches</a> (const bool &amp;is_bp)</td></tr>
+<tr class="memdesc:ad47aa3fc19b10ce1be32d844074fcfda"><td class="mdescLeft">&#160;</td><td class="mdescRight">clar layer caches <br /></td></tr>
+<tr class="separator:ad47aa3fc19b10ce1be32d844074fcfda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a089de356f000d96f0227666fe39d7eb5"><td class="memItemLeft" align="right" valign="top"><a id="a089de356f000d96f0227666fe39d7eb5"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#a089de356f000d96f0227666fe39d7eb5">get_argmax</a> (const float *x, const int &amp;range)</td></tr>
+<tr class="memdesc:a089de356f000d96f0227666fe39d7eb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">return argmax of given vector in a range <br /></td></tr>
+<tr class="separator:a089de356f000d96f0227666fe39d7eb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee1074adf7ece55fb0fd1461e13eeb5e"><td class="memItemLeft" align="right" valign="top"><a id="aee1074adf7ece55fb0fd1461e13eeb5e"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#aee1074adf7ece55fb0fd1461e13eeb5e">print_layers</a> ()</td></tr>
+<tr class="memdesc:aee1074adf7ece55fb0fd1461e13eeb5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">print parameters of all layers <br /></td></tr>
+<tr class="separator:aee1074adf7ece55fb0fd1461e13eeb5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d91cf53c9f1dd39f9aaefff153a65d3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#a2d91cf53c9f1dd39f9aaefff153a65d3">train_and_dev</a> (const vector&lt; float &gt; &amp;X_train, const vector&lt; int &gt; &amp;Y_train, const vector&lt; float &gt; &amp;X_dev, const vector&lt; int &gt; &amp;Y_dev, const int &amp;n_train, const int &amp;n_dev, const int num_epochs, float learning_rate, float lambda, int batch_size, string optimizer, bool batch_norm, bool print_cost, int print_period)</td></tr>
+<tr class="separator:a2d91cf53c9f1dd39f9aaefff153a65d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9809de12b4182b61b98e652b0e61856c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#a9809de12b4182b61b98e652b0e61856c">predict</a> (const vector&lt; float &gt; &amp;X, vector&lt; int &gt; &amp;Y_prediction, const int &amp;n_sample)</td></tr>
 <tr class="separator:a9809de12b4182b61b98e652b0e61856c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f12d5a496ec38e1b4def98908e32236"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#a7f12d5a496ec38e1b4def98908e32236">predict_accuracy</a> (const vector&lt; float &gt; &amp;_X, const vector&lt; int &gt; &amp;Y, vector&lt; int &gt; &amp;Y_prediction, const int &amp;n_sample)</td></tr>
 <tr class="separator:a7f12d5a496ec38e1b4def98908e32236"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aea2749931a0cb4bd48112371852633a9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#aea2749931a0cb4bd48112371852633a9">initialize_weights</a> ()</td></tr>
-<tr class="separator:aea2749931a0cb4bd48112371852633a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a09a39f5b6f0b29af3ae470a907e3c097"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#a09a39f5b6f0b29af3ae470a907e3c097">shuffle</a> (float *X, float *Y, int n_sample)</td></tr>
 <tr class="separator:a09a39f5b6f0b29af3ae470a907e3c097"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe3252fc51fda18ec793933157bad7b8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#afe3252fc51fda18ec793933157bad7b8">batch</a> (const float *X, const float *Y, float *X_batch, float *Y_batch, int batch_size, int batch_id)</td></tr>
 <tr class="separator:afe3252fc51fda18ec793933157bad7b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e099c8aa579b99170b170f306029c5f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#a7e099c8aa579b99170b170f306029c5f">batch</a> (const float *X, float *X_batch, int batch_size, int batch_id)</td></tr>
 <tr class="separator:a7e099c8aa579b99170b170f306029c5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb3008f68cd011e0820612c972fae41d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#acb3008f68cd011e0820612c972fae41d">max</a> (const float *x, int range, int &amp;index_max)</td></tr>
-<tr class="separator:acb3008f68cd011e0820612c972fae41d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7d070a8383387047777429750d31c2e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#ac7d070a8383387047777429750d31c2e">sigmoid_activate</a> (const int &amp;l, const int &amp;n_sample)</td></tr>
-<tr class="separator:ac7d070a8383387047777429750d31c2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abb924e8a0917dd8a43c057d6f750ee2f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#abb924e8a0917dd8a43c057d6f750ee2f">ReLU_activate</a> (const int &amp;l, const int &amp;n_sample)</td></tr>
-<tr class="separator:abb924e8a0917dd8a43c057d6f750ee2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad01dcf32fdb9321ad8396bafb0495f6b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#ad01dcf32fdb9321ad8396bafb0495f6b">sigmoid_backward_activate</a> (const int &amp;l, const int &amp;n_sample)</td></tr>
-<tr class="separator:ad01dcf32fdb9321ad8396bafb0495f6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2fe2905bc80e29dd50130bc41485adf4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#a2fe2905bc80e29dd50130bc41485adf4">ReLU_backward_activate</a> (const int &amp;l, const int &amp;n_sample)</td></tr>
-<tr class="separator:a2fe2905bc80e29dd50130bc41485adf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a919bcb8e48259d7a433677bce41b0a64"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#a919bcb8e48259d7a433677bce41b0a64">get_softmax</a> (const int &amp;n_sample)</td></tr>
-<tr class="separator:a919bcb8e48259d7a433677bce41b0a64"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0b6f3f64459feb244ffa795c8eef91b3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#a0b6f3f64459feb244ffa795c8eef91b3">forward_activated_propagate</a> (const int &amp;l, const int &amp;n_sample, const bool &amp;eval)</td></tr>
-<tr class="separator:a0b6f3f64459feb244ffa795c8eef91b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d76c251b70fb0423a3fb9c42af32752"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#a6d76c251b70fb0423a3fb9c42af32752">backward_propagate</a> (const int &amp;l, const int &amp;n_sample)</td></tr>
-<tr class="separator:a6d76c251b70fb0423a3fb9c42af32752"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad618d5da89744e6bc10e217d81d99605"><td class="memItemLeft" align="right" valign="top"><a id="ad618d5da89744e6bc10e217d81d99605"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#ad618d5da89744e6bc10e217d81d99605">multi_layers_forward</a> (const int &amp;n_sample, const bool &amp;eval)</td></tr>
-<tr class="memdesc:ad618d5da89744e6bc10e217d81d99605"><td class="mdescLeft">&#160;</td><td class="mdescRight">multi layers forward propagate and activation <br /></td></tr>
-<tr class="separator:ad618d5da89744e6bc10e217d81d99605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd0d2299befcb69ff4f05d031ef301bf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#afd0d2299befcb69ff4f05d031ef301bf">feed_transposed</a> (const float *X, float *XT, int batch_size, int N)</td></tr>
+<tr class="separator:afd0d2299befcb69ff4f05d031ef301bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae01f8eb5d1d22098086dab0b582de425"><td class="memItemLeft" align="right" valign="top"><a id="ae01f8eb5d1d22098086dab0b582de425"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#ae01f8eb5d1d22098086dab0b582de425">multi_layers_forward</a> (const bool &amp;eval)</td></tr>
+<tr class="memdesc:ae01f8eb5d1d22098086dab0b582de425"><td class="mdescLeft">&#160;</td><td class="mdescRight">multi layers forward propagate and activation <br /></td></tr>
+<tr class="separator:ae01f8eb5d1d22098086dab0b582de425"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeea24db0c4f09f7697ad6c5881d1aabb"><td class="memItemLeft" align="right" valign="top"><a id="aeea24db0c4f09f7697ad6c5881d1aabb"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#aeea24db0c4f09f7697ad6c5881d1aabb">multi_layers_backward</a> (const float *Y, const int &amp;n_sample)</td></tr>
 <tr class="memdesc:aeea24db0c4f09f7697ad6c5881d1aabb"><td class="mdescLeft">&#160;</td><td class="mdescRight">multi layers backward propagate to get gradients <br /></td></tr>
 <tr class="separator:aeea24db0c4f09f7697ad6c5881d1aabb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8cf7454d21ad0b081e7f2b18619ed2cd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#a8cf7454d21ad0b081e7f2b18619ed2cd">weights_update</a> (const float &amp;learning_rate)</td></tr>
-<tr class="separator:a8cf7454d21ad0b081e7f2b18619ed2cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a428a2e13de6a707c98ed6506480dd6e5"><td class="memItemLeft" align="right" valign="top"><a id="a428a2e13de6a707c98ed6506480dd6e5"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#a428a2e13de6a707c98ed6506480dd6e5">initialize_layer_caches</a> (const int &amp;n_sample, const bool &amp;is_bp)</td></tr>
-<tr class="memdesc:a428a2e13de6a707c98ed6506480dd6e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">allocate memory space for layer caches A,dZ <br /></td></tr>
-<tr class="separator:a428a2e13de6a707c98ed6506480dd6e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a177251ed1f2ed2fb94d061938aad030e"><td class="memItemLeft" align="right" valign="top"><a id="a177251ed1f2ed2fb94d061938aad030e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#a177251ed1f2ed2fb94d061938aad030e">clear_layer_caches</a> ()</td></tr>
-<tr class="memdesc:a177251ed1f2ed2fb94d061938aad030e"><td class="mdescLeft">&#160;</td><td class="mdescRight">clear layer caches A,dZ <br /></td></tr>
-<tr class="separator:a177251ed1f2ed2fb94d061938aad030e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac75b380bdca4f7eb811a97db1dd499bb"><td class="memItemLeft" align="right" valign="top"><a id="ac75b380bdca4f7eb811a97db1dd499bb"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#ac75b380bdca4f7eb811a97db1dd499bb">initialize_dropout_masks</a> ()</td></tr>
-<tr class="memdesc:ac75b380bdca4f7eb811a97db1dd499bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">allocate memory space for dropout masks DropM <br /></td></tr>
-<tr class="separator:ac75b380bdca4f7eb811a97db1dd499bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4fdc890e9dcc625e7474b1f3b4a0e7fb"><td class="memItemLeft" align="right" valign="top"><a id="a4fdc890e9dcc625e7474b1f3b4a0e7fb"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#a4fdc890e9dcc625e7474b1f3b4a0e7fb">clear_dropout_masks</a> ()</td></tr>
-<tr class="memdesc:a4fdc890e9dcc625e7474b1f3b4a0e7fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">clear DropM <br /></td></tr>
-<tr class="separator:a4fdc890e9dcc625e7474b1f3b4a0e7fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b76e71899549d8b493ebba21e57816a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#a3b76e71899549d8b493ebba21e57816a">set_dropout_masks</a> ()</td></tr>
-<tr class="separator:a3b76e71899549d8b493ebba21e57816a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78a5cee598630ab8361f34989715501c"><td class="memItemLeft" align="right" valign="top"><a id="a78a5cee598630ab8361f34989715501c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>gradient_descent_optimize</b> (const float &amp;initial_learning_rate, const int &amp;num_epochs, const int &amp;step)</td></tr>
+<tr class="separator:a78a5cee598630ab8361f34989715501c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1be39e7b0018ff7f394c51a3f94c2ac5"><td class="memItemLeft" align="right" valign="top"><a id="a1be39e7b0018ff7f394c51a3f94c2ac5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>Adam_optimize</b> (const float &amp;initial_learning_rate, const float &amp;beta_1, const float &amp;beta_2, const int &amp;num_epochs, const int &amp;epoch_step, const int &amp;train_step)</td></tr>
+<tr class="separator:a1be39e7b0018ff7f394c51a3f94c2ac5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a90021be0d55ab9b68b283d39eac19818"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdnn.html#a90021be0d55ab9b68b283d39eac19818">cost_function</a> (const float *Y, const int &amp;n_sample)</td></tr>
 <tr class="separator:a90021be0d55ab9b68b283d39eac19818"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ab6d436cbc35d10258bd8d3e314cb36b8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab6d436cbc35d10258bd8d3e314cb36b8">&#9670;&nbsp;</a></span>dnn() <span class="overload">[1/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">dnn::dnn </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>n_f</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>n_c</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>constructor without hidden layers, perform logistic regression </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">n_f</td><td>No. of features in X </td></tr>
-    <tr><td class="paramname">n_c</td><td>No. of classes in Y </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="aae6e714fc63cc1b73b40510e5a3401c7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aae6e714fc63cc1b73b40510e5a3401c7">&#9670;&nbsp;</a></span>dnn() <span class="overload">[2/3]</span></h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>deep neural networks exercises with C++ logistic regression, feed forward neural network, convolutional neural network, recurrent neural network (to be updated) </p><dl class="section author"><dt>Author</dt><dd>qiong zhu </dd></dl>
+<dl class="section version"><dt>Version</dt><dd>0.2 18/04/2019 </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a70a21783e965e89e1df0f26db895ce2c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a70a21783e965e89e1df0f26db895ce2c">&#9670;&nbsp;</a></span>dnn()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -196,20 +158,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>n_h</em>, </td>
+          <td class="paramtype"><a class="el" href="classlayers.html">layers</a> *&#160;</td>
+          <td class="paramname"><em>head</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const vector&lt; int &gt; &amp;&#160;</td>
-          <td class="paramname"><em>dims</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const vector&lt; string &gt; &amp;&#160;</td>
-          <td class="paramname"><em>act_types</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="classlayers.html">layers</a> *&#160;</td>
+          <td class="paramname"><em>tail</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -218,76 +174,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
         </tr>
       </table>
 </div><div class="memdoc">
-<p>constructor with hidden layer dimensions and activation types specified </p><dl class="params"><dt>Parameters</dt><dd>
+<p>constructor with input and output layers </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">n_f</td><td>No. of features in X </td></tr>
     <tr><td class="paramname">n_c</td><td>No. of classes in Y </td></tr>
-    <tr><td class="paramname">n_h</td><td>No. of hidden layers </td></tr>
-    <tr><td class="paramname">dims</td><td>integer vector containing hidden layer dimension </td></tr>
-    <tr><td class="paramname">act_types</td><td>string vector containing activation types for the hidden layers </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a657974689367069e38e600c594a461f0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a657974689367069e38e600c594a461f0">&#9670;&nbsp;</a></span>dnn() <span class="overload">[3/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">dnn::dnn </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>n_f</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>n_c</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>n_h</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const vector&lt; int &gt; &amp;&#160;</td>
-          <td class="paramname"><em>dims</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const vector&lt; string &gt; &amp;&#160;</td>
-          <td class="paramname"><em>act_types</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const vector&lt; float &gt; &amp;&#160;</td>
-          <td class="paramname"><em>k_ps</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>constructor with hidden layer dimensions, activation types and dropout keep_probs specified </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">n_f</td><td>No. of features in X </td></tr>
-    <tr><td class="paramname">n_c</td><td>No. of classes in Y </td></tr>
-    <tr><td class="paramname">n_h</td><td>No. of hidden layers </td></tr>
-    <tr><td class="paramname">dims</td><td>integer vector containing hidden layer dimension </td></tr>
-    <tr><td class="paramname">act_types</td><td>string vector containing activation types for the hidden layers </td></tr>
-    <tr><td class="paramname">k_ps</td><td>keep probabilities for dropout in the hidden layers </td></tr>
+    <tr><td class="paramname">head</td><td>input layer </td></tr>
+    <tr><td class="paramname">tail</td><td>output layer </td></tr>
   </table>
   </dd>
 </dl>
@@ -295,57 +187,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a6d76c251b70fb0423a3fb9c42af32752"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6d76c251b70fb0423a3fb9c42af32752">&#9670;&nbsp;</a></span>backward_propagate()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void dnn::backward_propagate </td>
-          <td>(</td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>l</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>n_sample</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>backward propagate for each layer <br />
- if J is the total mean cost, denote all <br />
- <img class="formulaInl" alt="$\partial{J}/\partial{A}\to dA$" src="form_0.png"/>, <img class="formulaInl" alt="$\partial{J}/\partial{Z}\to dZ$" src="form_1.png"/>, <br />
- <img class="formulaInl" alt="$\partial{J}/\partial{W}\to dW$" src="form_2.png"/>, <img class="formulaInl" alt="$\partial{J}/\partial{b}\to db$" src="form_3.png"/>, <br />
- <img class="formulaInl" alt="$\partial{A}/\partial{Z}\to dF$" src="form_4.png"/> <br />
- and denote layer_dims[l]-&gt;n_[l], * for dot product, .* for element-wise product <br />
- input: dZ[l],A[l-1],W[l] <br />
-</p>
-<p>update: <br />
- db[l](n[l])=sum(dZ[l](n_sample,n[l]),axis=0) <br />
- dW[l](n[l],n[l-1])=dZ[l](n_sample,n[l]).T*A[l-1](n_sample,n[l-1]) <br />
- dF=activation_backward(A[l-1](n_sample,n[l-1]) <br />
- dZ[l-1](n_sample,n[l])=(dZ[l](n_sample,n[l])*W[l](n[l],n[l-1])).*dF(n_sample,n[l-1]) <br />
-</p>
-<p>output: dZ[l-1],dW[l],db[l] <br />
- </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">l</td><td>layer index </td></tr>
-    <tr><td class="paramname">n_sample</td><td>No. of samples in the datasets </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>dZ[l-1],dW[l],db[l] updated </dd></dl>
-
-</div>
-</div>
 <a id="afe3252fc51fda18ec793933157bad7b8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afe3252fc51fda18ec793933157bad7b8">&#9670;&nbsp;</a></span>batch() <span class="overload">[1/2]</span></h2>
 
@@ -486,10 +327,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
       </table>
 </div><div class="memdoc">
 <p>Calculate the mean cost using the cross-entropy loss <br />
- input: A[n_layers-1], Y <br />
+ input: output-&gt;A, Y <br />
 </p>
 <p>update: <br />
- J=-Y.*log(A[n_layers-1]) <br />
+ J=-Y.*log(output-&gt;A) <br />
  cost=sum(J)/n_sample <br />
 </p>
 <p>output: </p><dl class="params"><dt>Parameters</dt><dd>
@@ -502,134 +343,35 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 </div>
 </div>
-<a id="a0b6f3f64459feb244ffa795c8eef91b3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0b6f3f64459feb244ffa795c8eef91b3">&#9670;&nbsp;</a></span>forward_activated_propagate()</h2>
+<a id="afd0d2299befcb69ff4f05d031ef301bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd0d2299befcb69ff4f05d031ef301bf">&#9670;&nbsp;</a></span>feed_transposed()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void dnn::forward_activated_propagate </td>
-          <td>(</td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>l</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>n_sample</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const bool &amp;&#160;</td>
-          <td class="paramname"><em>eval</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Forward propagate and activation for each layer <br />
- input: A[l-1],W[l],b[l],DropM[l-1] <br />
-</p>
-<p>update: <br />
- if dropout==true: A[l-1]=A[l-1].*DropM[l-1] <br />
- A[l]=activation_function(W[l].T*A[l-1]+b[l]) <br />
-</p>
-<p>output: A[l] <br />
- </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">l</td><td>layer index </td></tr>
-    <tr><td class="paramname">n_sample</td><td>No. of samples in the datasets </td></tr>
-    <tr><td class="paramname">eval</td><td>if eval==true, dropout is not used </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A[l] updated </dd></dl>
-
-</div>
-</div>
-<a id="a919bcb8e48259d7a433677bce41b0a64"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a919bcb8e48259d7a433677bce41b0a64">&#9670;&nbsp;</a></span>get_softmax()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void dnn::get_softmax </td>
-          <td>(</td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>n_sample</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Calculate the softmax of the given(by default the final) layer <br />
- l=n_layers-1 <br />
- input: Z[l] (stored in A[l]) <br />
-</p>
-<p>update: <br />
- A[l][i]= exp(Z[l][i])/(exp(Z[l][i])) <br />
-</p>
-<p>output: A[l] <br />
- </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">n_sample</td><td>No. of samples in the datasets </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A[l] stored with the softmax neurons </dd></dl>
-
-</div>
-</div>
-<a id="aea2749931a0cb4bd48112371852633a9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aea2749931a0cb4bd48112371852633a9">&#9670;&nbsp;</a></span>initialize_weights()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void dnn::initialize_weights </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Allocate memory space for W,dW,b,db, <br />
- initialize weights W with random <br />
- normal distributions and b with zeros <br />
- </p>
-
-</div>
-</div>
-<a id="acb3008f68cd011e0820612c972fae41d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acb3008f68cd011e0820612c972fae41d">&#9670;&nbsp;</a></span>max()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float dnn::max </td>
+          <td class="memname">void dnn::feed_transposed </td>
           <td>(</td>
           <td class="paramtype">const float *&#160;</td>
-          <td class="paramname"><em>x</em>, </td>
+          <td class="paramname"><em>X</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float *&#160;</td>
+          <td class="paramname"><em>XT</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>range</em>, </td>
+          <td class="paramname"><em>batch_size</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int &amp;&#160;</td>
-          <td class="paramname"><em>index_max</em>&#160;</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>N</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -638,15 +380,39 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Get the maximum value and index from the array </p><dl class="params"><dt>Parameters</dt><dd>
+<p>feed the batch training data transposed </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">x</td><td>pointer to the array </td></tr>
-    <tr><td class="paramname">range</td><td>range of array </td></tr>
-    <tr><td class="paramname">index_max</td><td>reference pointer to argmax of the array </td></tr>
+    <tr><td class="paramname">X</td><td>batched data </td></tr>
+    <tr><td class="paramname">XT</td><td>transposed feeded data </td></tr>
+    <tr><td class="paramname">batch_size</td><td>No. of samples </td></tr>
+    <tr><td class="paramname">feature/classes</td><td>dimension </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the maximum value,argmax of the array store in index_max </dd></dl>
+
+</div>
+</div>
+<a id="a3d2b06debb98d46177e8b93d9bd6ad21"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d2b06debb98d46177e8b93d9bd6ad21">&#9670;&nbsp;</a></span>insert_after_input()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void dnn::insert_after_input </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classlayers.html">layers</a> *&#160;</td>
+          <td class="paramname"><em>new_layer</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>insert hidden layer after the input layer </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">new_layer</td><td>the new layer to be inserted </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -743,116 +509,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 </div>
 </div>
-<a id="abb924e8a0917dd8a43c057d6f750ee2f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abb924e8a0917dd8a43c057d6f750ee2f">&#9670;&nbsp;</a></span>ReLU_activate()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void dnn::ReLU_activate </td>
-          <td>(</td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>l</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>n_sample</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Perform ReLU activation for the given layer <br />
- input: Z[l] (stored in A[l]) <br />
-</p>
-<p>update: <br />
- A[l]= Z[l], if Z[l]&gt;0 <br />
- 0 , otherwise <br />
-</p>
-<p>output: A[l] <br />
- </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">l</td><td>layer index </td></tr>
-    <tr><td class="paramname">n_sample</td><td>No. of samples in the datasets </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A[l] stored with activated neurons </dd></dl>
-
-</div>
-</div>
-<a id="a2fe2905bc80e29dd50130bc41485adf4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2fe2905bc80e29dd50130bc41485adf4">&#9670;&nbsp;</a></span>ReLU_backward_activate()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void dnn::ReLU_backward_activate </td>
-          <td>(</td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>l</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>n_sample</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Perform ReLU backward gradients calculation <br />
- input: A[l] <br />
-</p>
-<p>update: <br />
- dF= 1, if A[l]&gt;0 <br />
- 0, otherwise <br />
- dZ[l]=dF.*dZ[l] <br />
-</p>
-<p>output:dZ[l] <br />
- </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">l</td><td>layer index </td></tr>
-    <tr><td class="paramname">n_sample</td><td>No. of samples in the batch </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>dZ[l] updated </dd></dl>
-
-</div>
-</div>
-<a id="a3b76e71899549d8b493ebba21e57816a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3b76e71899549d8b493ebba21e57816a">&#9670;&nbsp;</a></span>set_dropout_masks()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void dnn::set_dropout_masks </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Initialize dropout masks DropM <br />
- if No. of hidden layers &gt;0 and dropout==true <br />
- assign 1/0 according to keep probabilities keep_probs <br />
- </p>
-
-</div>
-</div>
 <a id="a09a39f5b6f0b29af3ae470a907e3c097"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a09a39f5b6f0b29af3ae470a907e3c097">&#9670;&nbsp;</a></span>shuffle()</h2>
 
@@ -896,95 +552,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 </div>
 </div>
-<a id="ac7d070a8383387047777429750d31c2e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac7d070a8383387047777429750d31c2e">&#9670;&nbsp;</a></span>sigmoid_activate()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void dnn::sigmoid_activate </td>
-          <td>(</td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>l</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>n_sample</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Perform sigmoid activation for the given layer <br />
- input: Z[l] (stored in A[l]) <br />
-</p>
-<p>update: <br />
- A[l]=1/(1+exp(-Z[l]) <br />
-</p>
-<p>output: A[l] <br />
- </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">l</td><td>layer index </td></tr>
-    <tr><td class="paramname">n_sample</td><td>No. of samples in the datasets </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A[l] stored with activated neurons </dd></dl>
-
-</div>
-</div>
-<a id="ad01dcf32fdb9321ad8396bafb0495f6b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad01dcf32fdb9321ad8396bafb0495f6b">&#9670;&nbsp;</a></span>sigmoid_backward_activate()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void dnn::sigmoid_backward_activate </td>
-          <td>(</td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>l</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const int &amp;&#160;</td>
-          <td class="paramname"><em>n_sample</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Perform sigmoid backward gradients calculation <br />
- input: A[l] <br />
-</p>
-<p>update: <br />
- dF= A_[l]*(1-A_[l]) =A_[l]-A_[l]*A_[l] <br />
- dZ[l]=dF.*dZ[l] <br />
-</p>
-<p>output:dZ[l] <br />
- </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">l</td><td>layer index </td></tr>
-    <tr><td class="paramname">n_sample</td><td>No. of samples in the batch </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>dZ[l] updated </dd></dl>
-
-</div>
-</div>
-<a id="a9377e30990622d77b1ca09c1b1ab6f8a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9377e30990622d77b1ca09c1b1ab6f8a">&#9670;&nbsp;</a></span>train_and_dev()</h2>
+<a id="a2d91cf53c9f1dd39f9aaefff153a65d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d91cf53c9f1dd39f9aaefff153a65d3">&#9670;&nbsp;</a></span>train_and_dev()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1029,13 +598,13 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const int&#160;</td>
-          <td class="paramname"><em>num_epochs</em> = <code>500</code>, </td>
+          <td class="paramname"><em>num_epochs</em> = <code>100</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>learning_rate</em> = <code>0.01</code>, </td>
+          <td class="paramname"><em>learning_rate</em> = <code>0.001</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -1052,8 +621,26 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>optimizer</em> = <code>&quot;gradient_descent&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>print_cost</em> = <code>false</code>&#160;</td>
+          <td class="paramname"><em>batch_norm</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>print_cost</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>print_period</em> = <code>1</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1074,42 +661,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
     <tr><td class="paramname">learning_rate</td><td>learning rate of of gradients updating </td></tr>
     <tr><td class="paramname">lambda</td><td>L2-regularization factor </td></tr>
     <tr><td class="paramname">batch_size</td><td>batch size in the stochastic batch gradient training </td></tr>
-    <tr><td class="paramname">print_cost</td><td>print the training/validation cost every 50 epochs if print_cost==true </td></tr>
+    <tr><td class="paramname">optimizer</td><td>if "gradient_descent", uses mini-batch gradient descent, if "Adam", use Adam optimizer </td></tr>
+    <tr><td class="paramname">batch_norm</td><td>if true, batch normalization is used </td></tr>
+    <tr><td class="paramname">print_cost</td><td>print the training/validation cost every print_period epochs if print_cost==true </td></tr>
+    <tr><td class="paramname">print_period</td><td>print results every period epochs </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>weights and bias W,b updated in the object </dd></dl>
-
-</div>
-</div>
-<a id="a8cf7454d21ad0b081e7f2b18619ed2cd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8cf7454d21ad0b081e7f2b18619ed2cd">&#9670;&nbsp;</a></span>weights_update()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void dnn::weights_update </td>
-          <td>(</td>
-          <td class="paramtype">const float &amp;&#160;</td>
-          <td class="paramname"><em>learning_rate</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>update all the weights W and bias b <br />
-</p>
-<p>for each l from 1 to n_layers-1 <br />
- W[l]:=W[l]-learning_rate*dW[l] <br />
- b[l]:=b[l]-learning_rate*db[l] <br />
-</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">learning_rate</td><td>learning rate </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>W,b updated </dd></dl>
 
 </div>
 </div>

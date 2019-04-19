@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['clear_5fdropout_5fmasks',['clear_dropout_masks',['../classdnn.html#a4fdc890e9dcc625e7474b1f3b4a0e7fb',1,'dnn']]],
-  ['clear_5flayer_5fcaches',['clear_layer_caches',['../classdnn.html#a177251ed1f2ed2fb94d061938aad030e',1,'dnn']]],
-  ['cost_5ffunction',['cost_function',['../classdnn.html#a90021be0d55ab9b68b283d39eac19818',1,'dnn']]]
+  ['backward_5fpropagate',['backward_propagate',['../classlayers.html#a0de9d8b348299e9e907045cb694ca623',1,'layers']]],
+  ['batch',['batch',['../classdnn.html#afe3252fc51fda18ec793933157bad7b8',1,'dnn::batch(const float *X, const float *Y, float *X_batch, float *Y_batch, int batch_size, int batch_id)'],['../classdnn.html#a7e099c8aa579b99170b170f306029c5f',1,'dnn::batch(const float *X, float *X_batch, int batch_size, int batch_id)']]]
 ];

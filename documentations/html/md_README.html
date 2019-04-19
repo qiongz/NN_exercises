@@ -77,55 +77,62 @@ $(function() {
  <a href="https://www.kaggle.com/c/digit-recognizer/data">https://www.kaggle.com/c/digit-recognizer/data</a></p>
 <h2>Running the test</h2>
 <h3>multi-classes logistic regression</h3>
-<p>./test_mlr </p><pre><code>
-Cost of train/validation at epoch    0 :  0.45934263 0.34229076 
-Cost of train/validation at epoch   10 :  0.25960219 0.28029829 
-Cost of train/validation at epoch   20 :  0.24500903 0.27580458 
-Cost of train/validation at epoch   30 :  0.23828110 0.27294943 
-validation set accuracy:0.925119
-Enter image id (0&lt;=id&lt;8400):<br />
-
-0
-----------------------------</code></pre><pre><code>            *********       
-           ***********      
-           ************     
-           ************     
-                    ***     
-                    ***     
-                    ***     
-                   ****     
-                  *****     
-                 *****      
-                *****       
-      **************        
-    ***************         
-   ****************         
-   *****************        
-   ******************       
-   **********     ****      
-   ********       *****     
-    ****           ****     
-                    ***</code></pre><pre><code>----------------------------
-Predicted: 2
-Actual: 2</code></pre><pre><code></code></pre><h3>feed-forward neural network with two hidden-layers</h3>
-<p>Initialize the hidden layer dimensions with {256,128}<br />
- activation types with {"ReLU","sigmoid"}<br />
- keep probabilities in dropout regularization with {0.9,0.6,0.8}:<br />
- ./test_ffnn -n 100 <br />
+<p>Using dropout with keep_prob=0.85 to perform regularization in the input layer <br />
+ ./test_mlr -n 100 -a 0.003 </p><pre><code>
+Cost of train/validation at epoch    0 :  0.58074164 0.35054046 
+Cost of train/validation at epoch   10 :  0.27973989 0.26971540 
+Cost of train/validation at epoch   20 :  0.27052698 0.27189568 
+Cost of train/validation at epoch   30 :  0.26301974 0.27001908 
+Cost of train/validation at epoch   40 :  0.25950569 0.26645681 
+Cost of train/validation at epoch   50 :  0.25770107 0.26931667 
+Cost of train/validation at epoch   60 :  0.26052868 0.27073887 
+Cost of train/validation at epoch   70 :  0.25515199 0.26677442 
+Cost of train/validation at epoch   80 :  0.25009876 0.26658201 
+Cost of train/validation at epoch   90 :  0.24885687 0.26687291 
+Cost of train/validation at epoch  100 :  0.24961139 0.26613927 
+validation set accuracy:0.928571
+</code></pre><h3>feed-forward neural network with two hidden-layers</h3>
+<p>Initialize the hidden layer dimensions with {768,512}<br />
+ activation types with {"ReLU","ReLU"}<br />
+ keep probabilities in dropout regularization with {0.85,0.4,0.5}:<br />
+ ./test_ffnn -n 50 -a 0.001 <br />
  </p><pre><code>
-Cost of train/validation at epoch    0 :  0.88942140 0.34440878 
-Cost of train/validation at epoch   10 :  0.16244245 0.10217448 
-Cost of train/validation at epoch   20 :  0.10956403 0.08221784 
-Cost of train/validation at epoch   30 :  0.09188860 0.06962664 
-Cost of train/validation at epoch   40 :  0.07479116 0.06810240 
-Cost of train/validation at epoch   50 :  0.06701186 0.06320439 
-Cost of train/validation at epoch   60 :  0.06487222 0.06216515 
-Cost of train/validation at epoch   70 :  0.05761564 0.06120869 
-Cost of train/validation at epoch   80 :  0.05512367 0.05802767 
-Cost of train/validation at epoch   90 :  0.05044307 0.05985889 
-Cost of train/validation at epoch  100 :  0.05259707 0.05880265 
-validation set accuracy:0.982143
+Cost of train/validation at epoch    0 :  0.75169951 0.24952073 
+Cost of train/validation at epoch   10 :  0.11169609 0.08198518 
+Cost of train/validation at epoch   20 :  0.06751236 0.07157799 
+Cost of train/validation at epoch   30 :  0.04579250 0.06736103 
+Cost of train/validation at epoch   40 :  0.03172652 0.06837747 
+Cost of train/validation at epoch   50 :  0.02747416 0.06784185 
+validation set accuracy:0.983095
 </code></pre><p> The accuracy is much better than the logistic regression</p>
+<h3>convolutional neural network</h3>
+<p>The test initialize the convolutional network with three convolutional and pooling layers <br />
+ Input layer: dropout keep_prob=0.9,<br />
+ 1st Conv2d layer: {filter_size=3, padding=1, stride=1, n_channel=16} <br />
+ 1st Pool layer: {filter_size=2,stride=2,n_channel=16} <br />
+ 2nd Conv2d layer: {filter_size=3, padding=1, stride=1, n_channel=32} <br />
+ 2nd Pool layer: {filter_size=2,stride=2,n_channel=32} <br />
+ 3rd Conv2d layer: {filter_size=3, padding=1, stride=1, n_channel=64} <br />
+ 3rd Pool layer: {filter_size=2,stride=2,n_channel=64} <br />
+ 1st Hidden layer: dim=512, dropout keep_prob=0.5 <br />
+ 2nd Hidden layer: dim=256, dropout keep_prob=0.6 <br />
+</p>
+<p>using batch_size=128 and Adam optimization with learning rate decay:</p>
+<p>./test_conv -n 10 -a 0.0025 <br />
+ </p><pre><code>
+Cost of train/validation at epoch    0 :  0.51284289 0.12400043 
+Cost of train/validation at epoch    1 :  0.10023427 0.06492750 
+Cost of train/validation at epoch    2 :  0.06424299 0.04772324 
+Cost of train/validation at epoch    3 :  0.04936956 0.04153788 
+Cost of train/validation at epoch    4 :  0.03802959 0.04588846 
+Cost of train/validation at epoch    5 :  0.03091952 0.03321058 
+Cost of train/validation at epoch    6 :  0.02083942 0.03290170 
+Cost of train/validation at epoch    7 :  0.01673818 0.03719120 
+Cost of train/validation at epoch    8 :  0.01175991 0.03252161 
+Cost of train/validation at epoch    9 :  0.00862098 0.03288486 
+Cost of train/validation at epoch   10 :  0.00722232 0.03297896 
+validation set accuracy:0.992024
+</code></pre><p> The accuracy improves, while we could see that we're still over-fitting, batch-normalization will be updated in the further version.</p>
 <h2>License</h2>
 <p><a href="https://choosealicense.com/licenses/mit/">MIT</a> </p>
 </div></div><!-- contents -->
