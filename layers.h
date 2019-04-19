@@ -23,7 +23,7 @@
 #include<string>
 #include<ctime>
 #include"mkl.h"
-#define EPSILON 1e-12
+#define EPSILON 1e-8
 #define METHOD_INT VSL_RNG_METHOD_UNIFORMBITS_STD
 #define METHOD_FLOAT VSL_RNG_METHOD_UNIFORM_STD
 using namespace std;

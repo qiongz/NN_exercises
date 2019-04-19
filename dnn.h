@@ -115,6 +115,14 @@ public:
      */
     void batch(const float *X,float *X_batch,int batch_size, int batch_id);
 
+    /**
+     * feed the batch training data transposed 
+     * @param X batched data
+     * @param XT transposed feeded data
+     * @param batch_size No. of samples
+     * @param feature/classes dimension
+     */
+    void feed_transposed(const float *X, float *XT, int batch_size,int N);
 
     /// multi layers forward propagate and activation
     void multi_layers_forward(const bool &eval);

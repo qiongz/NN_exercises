@@ -10,9 +10,9 @@ void usage(char *target) {
 
 void init_argv(int &num_epochs, int &batch_size, float &learning_rate, float &lambda,int argc,char *argv[])
 {
-    num_epochs=100;
+    num_epochs=10;
     batch_size=128;
-    learning_rate=0.001;
+    learning_rate=0.002;
     lambda=0;
 
     extern char *optarg;

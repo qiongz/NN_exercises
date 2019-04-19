@@ -65,6 +65,12 @@ void dnn::batch(const float* X,float *X_batch,int batch_size,int batch_id) {
     cblas_scopy(n_features*batch_size,X+batch_size*batch_id*n_features,1,X_batch,1);
 }
 
+void dnn::feed_transposed(const float *X,float *XT,int batch_size,int n_fc){
+    for(int i=0;i<batch_size;i++)
+      for(int j=0;j<n_fc;j++)
+	XT[j*batch_size+i]=X[i*n_fc+j];
+}
+
 // cost function should only be called after or without backward-propagation
 float dnn::cost_function(const float *Y,const int &n_sample) {
     // create tempory space to store the cross-entropy loss vector
@@ -163,7 +169,9 @@ void dnn::train_and_dev(const vector<float> &_X_train,const vector<int> &_Y_trai
 
     initialize_layers(batch_size,Lambda,optimizer,batch_norm);
 
+    float *X_batch=new float[batch_size*n_features];
     float *Y_batch=new float[batch_size*n_classes];
+    float *Y_batch_T=new float[batch_size*n_classes];
     float cost_train,cost_dev,cost_batch;
     int num_train_batches=n_train/batch_size;
     // use num_dev_batches*batch_size for simplicity
@@ -177,11 +185,13 @@ void dnn::train_and_dev(const vector<float> &_X_train,const vector<int> &_Y_trai
         // batch training until all the data sets are used
         for(int s=0; s<num_train_batches; s++) {
 	    train_step=i*num_train_batches+s;
-            // batch feed input->A from X_train
-            batch(X_train,Y_train,input->A,Y_batch,batch_size,s);
+            batch(X_train,Y_train,X_batch,Y_batch,batch_size,s);
+	    // the data in A is using batch_size as leading dimension
+	    feed_transposed(X_batch,input->A,batch_size,n_features);
+	    feed_transposed(Y_batch,Y_batch_T,batch_size,n_classes);
             multi_layers_forward(false);
-            multi_layers_backward(Y_batch,batch_size);
-            cost_batch=cost_function(Y_batch,batch_size);
+            multi_layers_backward(Y_batch_T,batch_size);
+            cost_batch=cost_function(Y_batch_T,batch_size);
             if(optimizer=="Adam")
                 Adam_optimize(learning_rate,0.9,0.999,num_epochs,i,train_step);
             else
@@ -194,10 +204,11 @@ void dnn::train_and_dev(const vector<float> &_X_train,const vector<int> &_Y_trai
         if(print_cost && i%print_period==0) {
             cost_dev=0;
             for(int s=0; s<num_dev_batches; s++) {
-                // batch feed A[0] from X_dev
-                batch(X_dev,Y_dev,input->A,Y_batch,batch_size,s);
+                batch(X_dev,Y_dev,X_batch,Y_batch,batch_size,s);
+	        feed_transposed(X_batch,input->A,batch_size,n_features);
+	        feed_transposed(Y_batch,Y_batch_T,batch_size,n_classes);
                 multi_layers_forward(true);
-                cost_batch=cost_function(Y_batch,batch_size);
+                cost_batch=cost_function(Y_batch_T,batch_size);
                 cost_dev+=cost_batch;
             }
             cost_dev/=num_dev_batches;
@@ -206,7 +217,7 @@ void dnn::train_and_dev(const vector<float> &_X_train,const vector<int> &_Y_trai
         }
     }
     // clean the dropout masks, layer caches and layer gradient caches
-    delete Y_batch;
+    delete Y_batch_T,Y_batch_T,X_batch;
     clear_layers_caches(true);
     delete Y_dev,X_dev,Y_train,X_train;
 }
@@ -216,38 +227,47 @@ void dnn::predict(const vector<float>& _X,vector<int> &Y_prediction,const int &n
     int batch_size=128;
     // tempory space for the datasets for batching
     float *X=new float[_X.size()];
+    float *X_batch=new float[batch_size*n_features];
     for(int i=0; i<_X.size(); i++) X[i]=_X[i];
 
     initialize_layers_caches(batch_size,false);
 
     int n_batch=n_sample/batch_size;
     int n_residual=n_sample%batch_size;
-    int k_max;
+    int c_max;
     Y_prediction.assign(n_sample,-1);
     for(int s=0; s<n_batch; s++) {
         // batch feed A[0] from X and feed forward propagate
-        batch(X,input->A,batch_size,s);
+        batch(X,X_batch,batch_size,s);
+	feed_transposed(X_batch,input->A,batch_size,n_features);
         multi_layers_forward(true);
         // get the predictions from the softmax layer
         for(int k=0; k<batch_size; k++) {
             int j=s*batch_size+k;
-	    k_max=get_argmax(output->A+k*n_classes,n_classes);
-            Y_prediction[j]=k_max;
+	    c_max=0;
+	    for(int c=0;c<n_classes;c++)
+		if(output->A[c*batch_size+k]>output->A[c_max*batch_size+k])
+			c_max=c;
+            Y_prediction[j]=c_max;
         }
     }
     // get the predictions for the residual samples
     if(n_residual>0) {
-        memcpy(input->A,X+n_batch*batch_size*n_features,sizeof(float)*n_residual*n_features);
+        memcpy(X_batch,X+n_batch*batch_size*n_features,sizeof(float)*n_residual*n_features);
+	feed_transposed(X_batch,input->A,batch_size,n_features);
         multi_layers_forward(true);
         for(int k=0; k<n_residual; k++) {
             int j=n_batch*batch_size+k;
-	    k_max=get_argmax(output->A+k*n_classes,n_classes);
-            Y_prediction[j]=k_max;
+	    c_max=0;
+	    for(int c=0;c<n_classes;c++)
+		if(output->A[c*batch_size+k]>output->A[c_max*batch_size+k])
+			c_max=c;
+            Y_prediction[j]=c_max;
         }
     }
 
     clear_layers_caches(false);
-    delete X;
+    delete X_batch,X;
 }
 
 float dnn::predict_accuracy(const vector<float>& _X,const vector<int> &Y,vector<int> &Y_prediction,const int &n_sample) {
@@ -255,33 +275,42 @@ float dnn::predict_accuracy(const vector<float>& _X,const vector<int> &Y,vector<
     int batch_size=128;
     // tempory space for the datasets for batching
     float *X=new float[_X.size()];
+    float *X_batch=new float[batch_size*n_features];
     for(int i=0; i<_X.size(); i++) X[i]=_X[i];
 
     initialize_layers_caches(batch_size,false);
 
     int n_batch=n_sample/batch_size;
     int n_residual=n_sample%batch_size;
-    int k_max;
+    int c_max;
     Y_prediction.assign(n_sample,-1);
     for(int s=0; s<n_batch; s++) {
         // batch feed A[0] from X and feed forward propagate
-        batch(X,input->A,batch_size,s);
+        batch(X,X_batch,batch_size,s);
+	feed_transposed(X_batch,input->A,batch_size,n_features);
         multi_layers_forward(true);
         // get the predictions from the softmax layer
         for(int k=0; k<batch_size; k++) {
             int j=s*batch_size+k;
-	    k_max=get_argmax(output->A+k*n_classes,n_classes);
-            Y_prediction[j]=k_max;
+	    c_max=0;
+	    for(int c=0;c<n_classes;c++)
+		if(output->A[c*batch_size+k]>output->A[c_max*batch_size+k])
+			c_max=c;
+            Y_prediction[j]=c_max;
         }
     }
     // get the predictions for the residual samples
     if(n_residual>0) {
-        memcpy(input->A,X+n_batch*batch_size*n_features,sizeof(float)*n_residual*n_features);
+        memcpy(X_batch,X+n_batch*batch_size*n_features,sizeof(float)*n_residual*n_features);
+	feed_transposed(X_batch,input->A,batch_size,n_features);
         multi_layers_forward(true);
         for(int k=0; k<n_residual; k++) {
             int j=n_batch*batch_size+k;
-	    k_max=get_argmax(output->A+k*n_classes,n_classes);
-            Y_prediction[j]=k_max;
+	    c_max=0;
+	    for(int c=0;c<n_classes;c++)
+		if(output->A[c*batch_size+k]>output->A[c_max*batch_size+k])
+			c_max=c;
+            Y_prediction[j]=c_max;
         }
     }
 
@@ -292,6 +321,6 @@ float dnn::predict_accuracy(const vector<float>& _X,const vector<int> &Y,vector<
     accuracy/=n_sample;
 
     clear_layers_caches(false);
-    delete X;
+    delete X_batch,X;
     return accuracy;
 }

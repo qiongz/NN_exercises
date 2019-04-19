@@ -28,7 +28,7 @@ float layers::getmax(float *x,const int &range) {
 void layers::sigmoid_activate() {
   // A=-A
   for(int i=0; i<n_sample*dim; i++)
-    A[i]=-A[i];
+    A[i]=-A[i]+EPSILON;
   // A=exp(A)
   vsExp(n_sample*dim,A,A);
   // A=A+1
@@ -65,18 +65,28 @@ void layers::ReLU_backward() {
 
 // softmax  A[:,k]=exp(Z[:,k])/\sum_j(exp(Z[:,j]))
 void layers::get_softmax() {
+   float A_max,A_norm;
   // calculate the softmax for each sample of A
   for(int i=0; i<n_sample; i++) {
     // find the largest value A and substract it to prevent overflow
-    float A_max=getmax(A+i*dim,dim);
+    A_max=A[i];
+    for(int j=0;j<dim;j++)
+      if(A[j*n_sample+i]>A_max)
+	   A_max=A[j*n_sample+i];
+    for(int j=0; j<dim; j++)
+      A[j*n_sample+i]+=-A_max+EPSILON;
+  }
+  // vectorized exp
+  vsExp(n_sample*dim,A,A);
+  for(int i=0; i<n_sample; i++) {
     // substract the largest value, A[i]=A[i]-A_max
-    for(int k=0; k<dim; k++)
-      A[k+i*dim]-=A_max;
-    // A=exp(A)
-    vsExp(dim,A+i*dim,A+i*dim);
-    float A_norm=1.0/cblas_sasum(dim,A+i*dim,1);
-    // A[i]=exp(A[i])/\sum_i(exp(A[j]))
-    cblas_sscal(dim,A_norm,A+i*dim,1);
+    A_norm=0;
+    for(int j=0; j<dim; j++)
+      A_norm+=A[j*n_sample+i];
+
+    A_norm=1.0/A_norm;
+    for(int j=0;j<dim;j++)
+	 A[j*n_sample+i]*=A_norm; 
   }
 }
 
@@ -275,40 +285,53 @@ void layers::forward_activated_propagate(const bool &eval) {
   // if dropout is used, A[l-1]=A[l-1].*DropM[l-1], (softmax layer does not dropout)
   if(prev->dropout==true && eval==false) {
     prev->set_dropout_mask();
-    for(int i=0; i<n_sample; i++)
-      vsMul(prev->dim,prev->A+i*prev->dim,prev->dropout_mask,prev->A+i*prev->dim);
+    for(int i=0;i<prev->dim;i++)
+       cblas_sscal(n_sample,prev->dropout_mask[i],prev->A+i*n_sample,1);
   }
 
   /// Z(n_sample,n_channel,L,L)=W(n_channel,filter_size,filter_size,prev->n_channel)*prev->A(n_sample,prev->n_channel,prev->L,prev->L)
   /// L=(prev->L+2*paddling-filter_size)/stride+1, sum over (filter_size/stride, filter_size/stride,prev->n_channel)
   if(layer_type=="Conv2d") {
     long index_A,index_W,index_prev_A;
-    for(int m=0; m<n_sample; m++)
+    memset(A,0,sizeof(float)*n_sample*dim);
       for(int n=0; n<n_channel; n++)
         for(int i=0; i<L; i++)
           for(int j=0; j<L; j++) {
-            index_A=m*dim+n*area+i*L+j;
-            A[index_A]=b[n*area+i*L+j];
+            index_A=(n*area+i*L+j)*n_sample;
             for(int l=0; l<prev->n_channel; l++)
               for(int fl=0; fl<filter_size; fl++) {
                 // calcuate index outside of the innermost loop
                 int il=fl+i*stride-paddling;
                 if(il>=0 &&il<prev->L) {
                   index_W=n*prev->n_channel*filter_area+l*filter_area+fl*filter_size;
-                  index_prev_A=m*prev->dim+l*prev->area+il*prev->L+j*stride-paddling;
-                  // if convolution prod with paddling
+                  index_prev_A=(l*prev->area+il*prev->L+j*stride-paddling)*n_sample;
+                  // convolution prod with paddling
                   if(j*stride-paddling<0 || j*stride-paddling+filter_size>=prev->L)
                     for(int fw=0; fw<filter_size; fw++) {
                       int iw=fw+j*stride-paddling;
                       if(iw>=0 && iw<prev->L)
-                        A[index_A]+=W[index_W+fw]*prev->A[index_prev_A+fw];
+			 /* for-loop version */
+			// for(int m=0;m<n_sample;m++)
+                        //A[index_A+m]+=W[index_W+fw]*prev->A[index_prev_A+fw*n_sample+m];
+		       // vectorized version with n_sample as lda
+                        cblas_saxpy(n_sample,W[index_W+fw],prev->A+index_prev_A+fw*n_sample,1,A+index_A,1);
                     }
-                  // convolution within in A, just use dot-product
+                  // convolution within A, just use dot-product
                   else
-                    A[index_A]+=cblas_sdot(filter_size,W+index_W,1,prev->A+index_prev_A,1);
+	            /* for-loop version */
+	            //for(int fw=0;fw<filter_size;fw++)
+	            // for(int m=0;m<n_sample;m++)
+                    //  A[index_A+m]+=W[index_W+fw]*prev->A[index_prev_A+fw*n_sample+m];
+		    // vectorized version with n_sample as lda, actually a matrix-vector product A=prev->A*W
+	            for(int fw=0;fw<filter_size;fw++)
+                      cblas_saxpy(n_sample,W[index_W+fw],prev->A+index_prev_A+fw*n_sample,1,A+index_A,1);
+		    
                 }
               }
           }
+    for(int i=0;i<dim;i++)
+     for(int j=0; j<n_sample; j++)
+       A[i*n_sample+j]+=b[i];
   }
   /// Z(n_sample,n_channel,L,L)=max{ prev->A(n_sample,prev->n_channel,prev->L,prev->L) ,(filter_size,stride)}
   /// L=(prev->L-filter_size)/stride+1, sum over (filter_size,filter_size)/stride, leave n_channel unchanged
@@ -320,13 +343,13 @@ void layers::forward_activated_propagate(const bool &eval) {
         for(int i=0; i<L; i++)
           for(int j=0; j<L; j++) {
             /// max pooling, does not change No. of channels
-            index_A=m*dim+n*area+i*L+j;
-            argmax_Z=m*prev->dim+n*prev->area+i*stride*prev->L+j*stride;
+            index_A=(n*area+i*L+j)*n_sample+m;
+            argmax_Z=(n*prev->area+i*stride*prev->L+j*stride)*n_sample+m;
             for(int fl=0; fl<filter_size; fl++) {
               int il=fl+i*stride;
-              pool_outside_index=m*prev->dim+n*prev->area+il*prev->L+j*stride;
+              pool_outside_index=(n*prev->area+il*prev->L+j*stride)*n_sample+m;
               for(int fw=0; fw<filter_size; fw++) {
-                pool_index=pool_outside_index+fw;
+                pool_index=pool_outside_index+fw*n_sample;
                 if(prev->A[pool_index]>prev->A[argmax_Z])
                   argmax_Z=pool_index;
               }
@@ -336,13 +359,14 @@ void layers::forward_activated_propagate(const bool &eval) {
   }
   else {
     // linear forward propagation (from A[l-1] to Z[l])
-    // Z[l](n_sample,n_l) := A[l-1](n_sample,n_{l-1}) * W(n_l, n_{l-1}).T,
-    // Z(i,j): a[i+j*lda] for ColMajor, a[j+i*lda] for RowMajor, lda is the leading dimension
-    cblas_sgemm(CblasRowMajor,CblasNoTrans,CblasTrans,n_sample,dim,prev->dim,
-                alpha_, prev->A, prev->dim, W, prev->dim, beta_, A, dim);
+    // Z[l](n,n_sample) := W(n_l, n_{l-1})*A[l-1](n_{l-1},n_sample),
+    cblas_sgemm(CblasRowMajor,CblasNoTrans,CblasNoTrans,dim,n_sample,prev->dim,
+                alpha_, W, prev->dim, prev->A, n_sample, beta_, A, n_sample);
+
     // Z[l]:= Z[l]+b[l]
-    for(int i=0; i<n_sample; i++)
-      vsAdd(dim,A+i*dim,b,A+i*dim);
+    for(int i=0;i<dim;i++)
+     for(int j=0; j<n_sample; j++)
+       A[i*n_sample+j]+=b[i];
   }
   // activation output: A= activation_function(Z)
   if(activation=="sigmoid")
@@ -367,7 +391,7 @@ void layers::backward_propagate() {
     for(int i=0; i<dim; i++) {
       db[i]=0;
       for(int j=0; j<n_sample; j++)
-        db[i]+=dZ[j*dim+i];
+        db[i]+=dZ[i*n_sample+j];
     }
 
   /// dW(n_channel,filter_size,filter_size,prev->n_channel)=dZ(n_sample,n_channel,L,L)*prev->A(n_sample,prev->n_channel,prev->L,prev->L)
@@ -380,31 +404,35 @@ void layers::backward_propagate() {
           for(int fw=0; fw<filter_size; fw++) {
             index_dW=n*prev->n_channel*filter_area+l*filter_area+fl*filter_size+fw;
             dW[index_dW]=0;
-            for(int m=0; m<n_sample; m++)
+            //for(int m=0; m<n_sample; m++)
               for(int i=0; i<L; i++) {
                 int il=i*stride+fl-paddling;
                 if(il>=0 && il<prev->L) {
-                  index_dZ=m*dim+n*area+i*L;
-                  index_prev_A=m*prev->dim+l*prev->area+il*prev->L+fw-paddling;
+                  index_dZ=(n*area+i*L)*n_sample;
+                  index_prev_A=(l*prev->area+il*prev->L+fw-paddling)*n_sample;
                   // if convolution on the paddling of prev->A
                   if(fw-paddling<0 || fw-paddling+(L-1)*stride+1>=prev->L)
                     for(int j=0; j<L; j++) {
                       int iw=j*stride+fw-paddling;
                       if(iw>=0 && iw<prev->L)
-                        dW[index_dW]+=dZ[index_dZ+j]*prev->A[index_prev_A+j*stride];
+		       // vectorized version with n_sample as lda
+		        dW[index_dW]+=cblas_sdot(n_sample,dZ+index_dZ+j*n_sample,1,prev->A+index_prev_A+j*stride*n_sample,1);
                     }
                   // convolution within the valid range of prev->A
                   else
-                    dW[index_dW]+=cblas_sdot(L,dZ+index_dZ,1,prev->A+index_prev_A,stride);
+                    for(int j=0; j<L; j++) 
+		       // vectorized version with n_sample as lda
+		      dW[index_dW]+=cblas_sdot(n_sample,dZ+index_dZ+j*n_sample,1,prev->A+index_prev_A+j*stride*n_sample,1);
                 }
               }
           }
   }
   else if(layer_type=="Hidden" || layer_type=="Output") {
-    // dW[l](n_l,n_{l-1}):= dZ[l](n_sample,n_{l}) * A[l-1](n_sample,n_{l-1})
-    // op(dZ)(n_{l},n_sample), op(A[l-1])(n_sample,n_{l-1})
-    cblas_sgemm (CblasRowMajor,CblasTrans,CblasNoTrans,dim,prev->dim,n_sample,
-                 alpha_, dZ, dim, prev->A, prev->dim, beta_, dW, prev->dim);
+    // updated version using n_sample as lda
+    // dW[l](n_l,n_{l-1}):= dZ[l](n_{l},n_sample) * A[l-1](n_{l-1},n_sample).T
+    cblas_sgemm (CblasRowMajor,CblasNoTrans,CblasTrans,dim,prev->dim,n_sample,
+                 alpha_, dZ, n_sample, prev->A, n_sample, beta_, dW, prev->dim);
+
   }
 
   // dW:=dW+Lambda*W
@@ -416,22 +444,24 @@ void layers::backward_propagate() {
   if(prev->layer_type!="Input") {
     if(layer_type=="Conv2d") {
       long index_dA,index_W,index_dZ;
-      for(int m=0; m<n_sample; m++)
+      memset(prev->dA,0,sizeof(float)*n_sample*prev->dim);
         for(int l=0; l<prev->n_channel; l++)
           for(int il=0; il<prev->L; il++)
             for(int iw=0; iw<prev->L; iw++) {
-              index_dA=m*prev->dim+l*prev->area+il*prev->L+iw;
-              prev->dA[index_dA]=0;
+              index_dA=(l*prev->area+il*prev->L+iw)*n_sample;
               for(int n=0; n<n_channel; n++)
                 for(int fl=0; fl<filter_size; fl++) {
                   int i=(il+paddling-fl)/stride;
                   if(i>=0 && i<L) {
                     index_W=n*prev->n_channel*filter_area+l*filter_area+fl*filter_size;
-                    index_dZ=m*dim+n*area+i*L;
+                    index_dZ=(n*area+i*L)*n_sample;
                     for(int fw=0; fw<filter_size; fw++) {
                       int j=(iw+paddling-fw)/stride;
                       if(j>=0 &&j<L)
-                        prev->dA[index_dA]+=W[index_W+fw]*dZ[index_dZ+j];
+                      //for(int m=0; m<n_sample; m++)
+                       // prev->dA[index_dA+m]+=W[index_W+fw]*dZ[index_dZ+j*n_sample+m];
+		       // vectorized version with n_sample as lda
+                      cblas_saxpy(n_sample,W[index_W+fw],dZ+index_dZ+j*n_sample,1,prev->dA+index_dA,1);
                     }
                   }
                 }
@@ -446,14 +476,14 @@ void layers::backward_propagate() {
         for(int n=0; n<n_channel; n++)
           for(int i=0; i<L; i++)
             for(int j=0; j<L; j++) {
-              index_dZ=m*dim+n*area+i*L+j;
+              index_dZ=(n*area+i*L+j)*n_sample+m;
               // find the argmax of the prev->A within filter_area
-              argmax_A=m*prev->dim+n*prev->area+i*stride*prev->L+j*stride;
+              argmax_A=(n*prev->area+i*stride*prev->L+j*stride)*n_sample+m;
               for(int fl=0; fl<filter_size; fl++) {
                 int il=fl+i*stride;
-                pool_outside_index=m*prev->dim+n*prev->area+il*prev->L+j*stride;
+                pool_outside_index=(n*prev->area+il*prev->L+j*stride)*n_sample+m;
                 for(int fw=0; fw<filter_size; fw++) {
-                  pool_index=pool_outside_index+fw;
+                  pool_index=pool_outside_index+fw*n_sample;
                   if(prev->A[pool_index]>prev->A[argmax_A])
                     argmax_A=pool_index;
                 }
@@ -465,8 +495,12 @@ void layers::backward_propagate() {
     else {
       // dA[l-1]=dZ[l]*W[l]
       // calculate dZ[l](n_sample,n_{l-1}=dZ[l](n_sample,n_{l})* W[l](n_{l},n_{l-1})
-      cblas_sgemm (CblasRowMajor,CblasNoTrans,CblasNoTrans,n_sample,prev->dim,dim,
-                   alpha_, dZ, dim, W, prev->dim, beta_,prev->dA, prev->dim);
+      //cblas_sgemm (CblasRowMajor,CblasNoTrans,CblasNoTrans,n_sample,prev->dim,dim,
+       //            alpha_, dZ, dim, W, prev->dim, beta_,prev->dA, prev->dim);
+
+      // calculate dZ[l](n_{l-1},n_sample)= W[l](n_{l},n_{l-1}).T*dZ[l](n_{l},n_sample)
+      cblas_sgemm (CblasRowMajor,CblasTrans,CblasNoTrans,prev->dim,n_sample,dim,
+                   alpha_, W, prev->dim,dZ, n_sample, beta_,prev->dA, n_sample);
     }
     // dZ[l-1] <- dA[l-1].*dF
     if(prev->activation=="sigmoid")
