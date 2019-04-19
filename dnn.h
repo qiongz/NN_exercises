@@ -1,8 +1,9 @@
 /**
- * deep neural networks exercises
+ * deep neural networks exercises with C++
  * logistic regression,
  * feed forward neural network,
- * convolutional neural networks (to be updated),...
+ * convolutional neural network,
+ * recurrent neural network (to be updated)
  * @author qiong zhu
  * @version 0.2 18/04/2019
  */
@@ -41,6 +42,8 @@ public:
     void clear_layers_caches(const bool &is_bp);
     /// return argmax of given vector in a range
     int get_argmax(const float *x,const int &range);
+    /// print parameters of all layers
+    void print_layers();
 
     /**
      * Perform stochastic batch gradient training and evaluation using the validation(developing) data sets
@@ -56,10 +59,11 @@ public:
      * @param batch_size  batch size in the stochastic batch gradient training
      * @param optimizer if "gradient_descent", uses mini-batch gradient descent, if "Adam", use Adam optimizer
      * @param batch_norm  if true, batch normalization is used
-     * @param print_cost print the training/validation cost every 50 epochs if print_cost==true
+     * @param print_cost print the training/validation cost every print_period epochs if print_cost==true
+     * @param print_period print results every period epochs
      * @return weights and bias W,b updated in the object
      */
-    void train_and_dev(const vector<float>&X_train,const vector<int>&Y_train,const vector<float>&X_dev,const vector<int>&Y_dev,const int &n_train,const int &n_dev,const int num_epochs,float learning_rate,float lambda,int batch_size,string optimizer,bool batch_norm,bool print_cost);
+    void train_and_dev(const vector<float>&X_train,const vector<int>&Y_train,const vector<float>&X_dev,const vector<int>&Y_dev,const int &n_train,const int &n_dev,const int num_epochs,float learning_rate,float lambda,int batch_size,string optimizer,bool batch_norm,bool print_cost,int print_period);
 
     /**
      * Perform prediction for the given unlabeled datasets
@@ -134,7 +138,7 @@ public:
      */
     float cost_function(const float *Y,const int &n_sample);
 
-private: 
+private:
     layers *input,*output;  /// layers pointer to the input and output layers
     int n_features,n_classes,n_layers;  /// No. of features, classes and layers
     VSLStreamStatePtr rndStream;  /// pointer to the mkl rng

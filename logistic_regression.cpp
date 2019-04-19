@@ -19,15 +19,16 @@ int main(int argc,char *argv[]) {
     onehot(Y_dev_orig,Y_dev,n_classes);
 
     // multi-classes logistic regression with dropout 
-    layers input_layer(n_features,0.8,true,"Input","None");
-    layers output_layer(n_classes,1,false,"Output","softmax"); 
+    layers input_layer(n_features,28,0.85,true,"Input","None"); 
+    layers output_layer(n_classes,1,1,false,"Output","softmax"); 
 
     dnn clr(n_features,n_classes,&input_layer,&output_layer);
-    clr.train_and_dev(X_train,Y_train,X_dev,Y_dev,n_train,n_dev,num_epochs,learning_rate,Lambda,batch_size,"Adam",false,true);
+    clr.train_and_dev(X_train,Y_train,X_dev,Y_dev,n_train,n_dev,num_epochs,learning_rate,Lambda,batch_size,"Adam",false,true,10);
     accuracy=clr.predict_accuracy(X_dev,Y_dev_orig,Y_prediction,n_dev);
     cout<<"validation set accuracy:"<<accuracy<<endl;
    
-
+    /*
+    // select an image from the validation set, check by eye, and compare the predicted and the actual labels
     int id=0;
     string id_str;
     while(id>=0 && id<n_dev) {
@@ -40,5 +41,6 @@ int main(int argc,char *argv[]) {
             cout<<"Actual: "<<Y_dev_orig[id]<<endl;
         }
     }
+    */
     return 0;
 }

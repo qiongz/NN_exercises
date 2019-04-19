@@ -101,19 +101,20 @@ void dnn::multi_layers_backward(const float *Y,const int &n_sample) {
     // dZ=dZ/n_sample
     cblas_sscal(n_sample*n_classes,1.0/n_sample,output->dZ,1);
     // get gradients for all the layers down to l=1
-    for(layers *n=output; n!=input; n=n->prev){
+    for(layers *n=output; n!=input; n=n->prev)
         n->backward_propagate();
-    }
 }
 
 
 void dnn::Adam_optimize(const float &initial_learning_rate,const float &beta_1,const float &beta_2,const int &num_epochs,const int &epoch_step,const int &train_step) {
     for(layers *n=input->next; n!=NULL; n=n->next)
+	if(n->layer_type!="Pool")
         n->Adam_optimize(initial_learning_rate,beta_1,beta_2,num_epochs,epoch_step,train_step);
 }
 
 void dnn::gradient_descent_optimize(const float &initial_learning_rate,const int &num_epochs,const int &epoch_step) {
     for(layers *n=input->next; n!=NULL; n=n->next)
+	if(n->layer_type!="Pool")
         n->gradient_descent_optimize(initial_learning_rate,num_epochs,epoch_step);
 }
 
@@ -140,7 +141,13 @@ int dnn::get_argmax(const float *x,const int &range){
 	return max_idx;
 }
 
-void dnn::train_and_dev(const vector<float> &_X_train,const vector<int> &_Y_train,const vector<float>& _X_dev, const vector<int>& _Y_dev,const int &n_train, const int &n_dev, const int num_epochs=100,float learning_rate=0.001,const float _lambda=0,int batch_size=128,string optimizer="gradient_descent",bool batch_norm=false,bool print_cost=false) {
+void dnn::print_layers(){
+    cout<<"----------------------  layer parameters  --------------------"<<endl;
+    for(layers *n=input;n!=NULL;n=n->next)
+	    n->print_parameters();
+}
+
+void dnn::train_and_dev(const vector<float> &_X_train,const vector<int> &_Y_train,const vector<float>& _X_dev, const vector<int>& _Y_dev,const int &n_train, const int &n_dev, const int num_epochs=100,float learning_rate=0.001,const float _lambda=0,int batch_size=128,string optimizer="gradient_descent",bool batch_norm=false,bool print_cost=false,int print_period=1) {
     Lambda=_lambda;
     // tempory space for storing the shuffled training/developing data sets
     float *X_train=new float[_X_train.size()];
@@ -161,6 +168,7 @@ void dnn::train_and_dev(const vector<float> &_X_train,const vector<int> &_Y_trai
     int num_train_batches=n_train/batch_size;
     // use num_dev_batches*batch_size for simplicity
     int num_dev_batches=n_dev/batch_size;
+    long train_step=0;
 
     for(int i=0; i<num_epochs+1; i++) {
         // shuffle training data sets for one epoch
@@ -168,21 +176,22 @@ void dnn::train_and_dev(const vector<float> &_X_train,const vector<int> &_Y_trai
         cost_train=0;
         // batch training until all the data sets are used
         for(int s=0; s<num_train_batches; s++) {
+	    train_step=i*num_train_batches+s;
             // batch feed input->A from X_train
             batch(X_train,Y_train,input->A,Y_batch,batch_size,s);
             multi_layers_forward(false);
             multi_layers_backward(Y_batch,batch_size);
             cost_batch=cost_function(Y_batch,batch_size);
             if(optimizer=="Adam")
-                Adam_optimize(learning_rate,0.9,0.999,num_epochs,i,s+i*batch_size);
+                Adam_optimize(learning_rate,0.9,0.999,num_epochs,i,train_step);
             else
               gradient_descent_optimize(learning_rate,num_epochs,i);
             cost_train+=cost_batch;
+            //printf("Cost of train at train_step %6d :  %.8f \n",train_step,cost_batch);
         }
-
         cost_train/=num_train_batches;
         // evaluate the developing data sets and print the training/dev cost
-        if(print_cost && i%1==0) {
+        if(print_cost && i%print_period==0) {
             cost_dev=0;
             for(int s=0; s<num_dev_batches; s++) {
                 // batch feed A[0] from X_dev

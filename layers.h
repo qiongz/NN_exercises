@@ -1,9 +1,15 @@
 /**
  * layer class for constructing 
  * deep neural networks
+ * layer types: 
+ * "Input", input layer
+ * "Conv2d", conv2d layer
+ * "Pool",  pooling layer
+ * "Hidden", hidden or fully connected layer
+ * "Output", output layer
  *
  * @author qiong zhu
- * @version 0.1 18/04/2019
+ * @version 0.1 19/04/2019
  */
 #ifndef LAYERS_H
 #define LAYERS_H
@@ -22,18 +28,41 @@
 #define METHOD_FLOAT VSL_RNG_METHOD_UNIFORM_STD
 using namespace std;
 
-
 class layers {
 public:
     /**
      * constructor
      * @param d layer dimension
+     * @param length image length
      * @param _keep_prob  keep_prob
      * @param dropout if dropout is used
      * @param _layer_type layer type
      * @param _act activation type
      */
-    layers(int d,float _keep_prob=1,bool _dropout=false,string _layer_type="None",string _act="None"):dim(d),keep_prob(_keep_prob),dropout(_dropout),layer_type(_layer_type),activation(_act) {
+    layers(int d,int length,float _keep_prob=1,bool _dropout=false,string _layer_type="None",string _act="None"):dim(d),L(length),keep_prob(_keep_prob),dropout(_dropout),layer_type(_layer_type),activation(_act) {
+	    area=L*L;
+	    n_channel=1;
+	    optimizer="sgd";
+	    batch_norm=false;
+	    Lambda=0;
+	    is_init=false;
+	    prev=NULL;
+	    next=NULL;
+    }
+
+    /**
+     * constructor
+     * @param n No. of channels
+     * @param _keep_prob  keep_prob
+     * @param dropout if dropout is used
+     * @param _layer_type layer type
+     * @param _act activation type
+     * @param _paddle paddling
+     * @param _f filter_size
+     * @param _s stride
+     */
+    layers(int n,float _keep_prob=1,bool _dropout=false,string _layer_type="Conv2d",string _act="None",int _paddle=2,int f=3,int s=1 ):n_channel(n),keep_prob(_keep_prob),dropout(_dropout),layer_type(_layer_type),activation(_act),paddling(_paddle),filter_size(f),stride(s) {
+	    filter_area=filter_size*filter_size;
 	    optimizer="sgd";
 	    batch_norm=false;
 	    Lambda=0;
@@ -55,7 +84,7 @@ public:
     void init_dropout_mask();
     /// allocate weights memory and initialize
     void init_weights();
-    /// initialize momentum and rms weights for Adam optimization
+    /// allocate weights memory and initialize for convnet
     void init_momentum_rms();
     /// initialize batch normalization weights 
     void init_batch_norm_weights();
@@ -66,7 +95,7 @@ public:
     /// clear layer caches
     void clear_caches(const bool &is_bp);
     /// print layer parameters
-    void print_layer_parameters();
+    void print_parameters();
 
     /// get the max value given a float vector
     float getmax(float *x,const int &range);
@@ -148,7 +177,9 @@ public:
     void Adam_optimize(const float &initial_learning_rate,const float &beta_1,const float &beta_2,const int &num_epochs,const int &epoch_step,const int &train_step);
 
     layers *prev,*next;   /// pointer to the previous and next layer
-    int dim,n_sample;      /// layer dimension and sample size
+    int L,area,n_channel,dim,n_sample;      /// L, area=L*L, dim=area*n_channel, 
+    int dim_W,dim_b;   /// size of W,dW,VdW,SdW, and b,db,Vdb,Sdb
+    int paddling,stride,filter_size,filter_area;   /// parameter for conv nets
     string layer_type,activation,optimizer;   /// layer,activation and optimization types
     VSLStreamStatePtr rndStream;      /// pointer to the mkl random number generator
     unsigned weights_seed,mkl_seed;  /// seed for generate weights and dropout masks

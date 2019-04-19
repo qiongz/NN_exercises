@@ -9,15 +9,21 @@ MKL_PARAL_LIBS   := -L${MKLROOT}/lib/intel64 -lmkl_intel_lp64 -lmkl_intel_thread
 # ----------------------------------------
 default:
 	@echo "Available make targets are:"
-	@echo "  make test_mlr test_ffnn    # compiles logistic_regression.cpp feed_forward_neural_network.cpp"
+	@echo "  make test_mlr test_ffnn test_conv   # compiles logistic_regression.cpp feed_forward_neural_network.cpp"
 
-all:test_mlr test_ffnn
+all:test_mlr test_ffnn test_conv clean
 
 test_mlr:mlr.o init.o utils.o dnn.o layers.o
 	$(ICC) $^ -O3 -o $@  ${MKL_LIBS}
 
 test_ffnn:ffnn.o init.o utils.o dnn.o layers.o
 	$(ICC) $^ -O3 -o $@  ${MKL_LIBS}
+
+test_conv:conv.o init.o utils.o dnn.o layers.o
+	$(ICC) $^ -O3 -o $@  ${MKL_LIBS}
+
+conv.o:convolutional_neural_network.cpp
+	$(ICC) $(CFLAGS) $(MKL_CFLAGS) $^ -c -o $@
 
 ffnn.o:feed_forward_neural_network.cpp
 	$(ICC) $(CFLAGS) $(MKL_CFLAGS) $^ -c -o $@
@@ -36,13 +42,12 @@ dnn.o:dnn.cpp
 
 layers.o:layers.cpp
 	$(ICC) $(CFLAGS) $(MKL_CFLAGS) $^ -c -o $@
-
 	
 .PHONY:clean remove
 clean:
 	rm -f *.o 
 
 remove:
-	rm -f  test_mlr test_ffnn
+	rm -f  test_mlr test_ffnn  test_conv
 
 

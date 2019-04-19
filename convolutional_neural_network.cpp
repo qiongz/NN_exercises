@@ -18,16 +18,24 @@ int main(int argc,char *argv[]) {
     onehot(Y_train_orig,Y_train,n_classes);
     onehot(Y_dev_orig,Y_dev,n_classes);
 
-    layers input_layer(n_features,28,0.85,true,"Input","None"); 
-    layers hidden_layer_1(768,1,0.4,true,"Hidden","ReLU"); 
-    layers hidden_layer_2(512,1,0.5,true,"Hidden","ReLU"); 
-    layers output_layer(n_classes,1,1,false,"Output","softmax");  
+    layers input_layer(n_features,28,0.85,true,"Input","None"); /// L=28,                dim:= 28 x 28 x 1 x _n
+    layers conv_layer_1(6,1,false,"Conv2d","ReLU",2,5,1);      /// L=(28+2*2-5)+1=28     dim:= 28 x 28 x 6 x _n
+    layers pool_layer_1(6,1,false,"Pool","None",0,2,2);      /// L=(28-2)/2+1=14,        dim:= 14 x 14 x 6 x _n
+    layers conv_layer_2(12,1,false,"Conv2d","ReLU",2,5,1);      /// L=(14+2*2-5)/1+1=14, dim:= 14 x 14 x 12 x _n
+    layers pool_layer_2(12,1,false,"Pool","None",0,2,2);      /// L=(14-2)/2=6,          dim:= 6 x 6 x 12 x _n
+    layers fully_connected_layer_1(384,1,0.7,true,"Hidden","ReLU"); ///                  dim:= 384 x _n
+    layers fully_connected_layer_2(256,1,0.8,true,"Hidden","ReLU"); ///                  dim:= 256 x _n
+    layers output_layer(n_classes,1,1,false,"Output","softmax");   ///                   dim:= 10 x _n
 
     dnn clr(n_features,n_classes,&input_layer,&output_layer);
-    clr.insert_before_output(&hidden_layer_1);
-    clr.insert_before_output(&hidden_layer_2);
+    clr.insert_before_output(&conv_layer_1);
+    clr.insert_before_output(&pool_layer_1);
+    clr.insert_before_output(&conv_layer_2);
+    clr.insert_before_output(&pool_layer_2);
+    clr.insert_before_output(&fully_connected_layer_1);
+    clr.insert_before_output(&fully_connected_layer_2);
     
-    clr.train_and_dev(X_train,Y_train,X_dev,Y_dev,n_train,n_dev,num_epochs,learning_rate,Lambda,batch_size,"Adam",false,true,10);
+    clr.train_and_dev(X_train,Y_train,X_dev,Y_dev,n_train,n_dev,num_epochs,learning_rate,Lambda,batch_size,"Adam",false,true,1);
     accuracy=clr.predict_accuracy(X_dev,Y_dev_orig,Y_prediction,n_dev);
     cout<<"validation set accuracy:"<<accuracy<<endl;
 
